@@ -324,7 +324,19 @@
     padding:82px 0 100px;
     overflow:hidden;
   }
-  .hero .container{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1600&q=80');
+    background-size:cover;
+    background-position:center center;
+    opacity:.12;
+    filter:grayscale(1) contrast(1.2) brightness(0.9);
+    transform:scale(1.08);
+    pointer-events:none;
+  }
+  .hero .container{ position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; z-index:1; }
   .hero .label{ margin-top:8px; }
   .hero h1{ max-width:1020px; }
   .hero h1 .accent{ color:var(--yellow); }
@@ -379,6 +391,19 @@
   .photo:hover{ transform:translateY(-5px); box-shadow:0 18px 44px -24px rgba(0,0,0,.5); }
   .photo img{ width:100%; height:250px; object-fit:cover; transition:transform .45s ease; }
   .photo:hover img{ transform:scale(1.08); }
+  .fallback-image {
+    background:linear-gradient(135deg,#eef2ff,#f9fafb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#4b5563;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:12px;
+  }
   .photo figcaption{
     position:absolute; left:12px; bottom:12px;
     background:rgba(14,15,30,.78);
@@ -1376,6 +1401,44 @@
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    function buildFallbackSvg(label) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+          <defs>
+            <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="#f5f3ff"/>
+              <stop offset="100%" stop-color="#eef2ff"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="800" fill="url(#bg)"/>
+          <circle cx="220" cy="180" r="120" fill="#e0e7ff"/>
+          <circle cx="980" cy="600" r="180" fill="#fef3c7"/>
+          <rect x="180" y="190" width="840" height="420" rx="36" fill="rgba(255,255,255,0.7)" stroke="#c7d2fe" stroke-width="4"/>
+          <path d="M470 360 L560 450 L700 280" fill="none" stroke="#7c3aed" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="250" y="520" width="700" height="48" rx="24" fill="#e5e7eb"/>
+          <text x="600" y="550" text-anchor="middle" font-size="42" font-family="Arial, sans-serif" fill="#374151" font-weight="700">${label}</text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+    }
+
+    document.querySelectorAll('img').forEach((img) => {
+      img.addEventListener('error', () => {
+        if (img.dataset.fallbackApplied === 'true') return;
+        img.dataset.fallbackApplied = 'true';
+        img.src = buildFallbackSvg(img.alt || 'Image unavailable');
+        img.classList.add('fallback-image');
+      });
+    });
+
+    const heroVideo = document.querySelector('.hero-video video');
+    if (heroVideo) {
+      heroVideo.addEventListener('error', () => {
+        heroVideo.setAttribute('poster', buildFallbackSvg('Video unavailable'));
+        heroVideo.style.background = 'linear-gradient(135deg,#f5f3ff,#eef2ff)';
+      });
+    }
 
     /* ── Scroll reveal (lightweight) ─────────────────────────────────── */
     (function(){
