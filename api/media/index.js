@@ -1,6 +1,6 @@
 const { init, sql, sqlOne } = require('../_lib/db');
 const { requireAuth, parseMultipart } = require('../_lib/auth');
-const formidable = require('formidable');
+const { formidable } = require('formidable');
 const fs = require('fs');
 const { put } = require('@vercel/blob');
 

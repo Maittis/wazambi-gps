@@ -1,5 +1,5 @@
 const { init, sql } = require('./_lib/db');
-const formidable = require('formidable');
+const { formidable } = require('formidable');
 const fs = require('fs');
 const { put } = require('@vercel/blob');
 const { parseMultipart } = require('./_lib/auth');
@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('Parse error:', err);
     res.writeHead(400);
-    return res.end(JSON.stringify({ ok: false, errors: ['Failed to parse form data.'], detail: String(err && err.message || err) }));
+    return res.end(JSON.stringify({ ok: false, errors: ['Failed to parse form data.'] }));
   }
 
   const get = (k) => {
