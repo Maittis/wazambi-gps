@@ -57,16 +57,6 @@ async function readJson(req) {
   try { return JSON.parse(body); } catch { return {}; }
 }
 
-async function readJson(req) {
-  if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
-  if (req.body) {
-    try { return JSON.parse(req.body.toString()); } catch { return {}; }
-  }
-  let body = '';
-  for await (const chunk of req) body += chunk;
-  try { return JSON.parse(body); } catch { return {}; }
-}
-
 async function readBody(req) {
   if (req.body && Buffer.isBuffer(req.body)) return req.body;
   if (req.body && typeof req.body === 'string') return Buffer.from(req.body);

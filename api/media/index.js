@@ -1,5 +1,5 @@
 const { init, sql, sqlOne } = require('../_lib/db');
-const { requireAuth, parseMultipart } = require('../_lib/auth');
+const { requireAuth, parseMultipart, readJson } = require('../_lib/auth');
 const { formidable } = require('formidable');
 const fs = require('fs');
 const { put } = require('@vercel/blob');
@@ -21,6 +21,35 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
+    const isJson = (req.headers['content-type'] || '').includes('application/json');
+
+    if (isJson) {
+      const data = await readJson(req);
+      const slotKey = String(data.slot_key || '').replace(/[^a-zA-Z0-9._-]/g, '');
+      const blobUrl = String(data.url || data.blob_url || '').trim();
+      if (!slotKey || !blobUrl) {
+        res.writeHead(400);
+        return res.end(JSON.stringify({ ok: false, error: 'Missing slot or url' }));
+      }
+      try {
+        await sql`
+          INSERT INTO media (slot_key, blob_url, filename, file_size, updated_at)
+          VALUES (${slotKey}, ${blobUrl}, ${slotKey}, 0, NOW())
+          ON CONFLICT (slot_key) DO UPDATE SET
+            blob_url = ${blobUrl},
+            filename = ${slotKey},
+            file_size = 0,
+            updated_at = NOW()
+        `;
+        res.writeHead(200);
+        return res.end(JSON.stringify({ ok: true, url: blobUrl, slot: slotKey }));
+      } catch (err) {
+        console.error('Record failed:', err);
+        res.writeHead(500);
+        return res.end(JSON.stringify({ ok: false, error: 'Failed to record upload' }));
+      }
+    }
+
     const form = formidable({
       maxFileSize: 300 * 1024 * 1024,
       keepExtensions: true,
@@ -76,7 +105,7 @@ module.exports = async function handler(req, res) {
     } catch (err) {
       console.error('Upload failed:', err);
       res.writeHead(500);
-      return res.end(JSON.stringify({ ok: false, error: 'Upload failed', detail: String(err && err.message || err) }));
+      return res.end(JSON.stringify({ ok: false, error: 'Upload failed' }));
     }
   }
 

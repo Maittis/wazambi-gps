@@ -353,14 +353,45 @@ async function renderMedia(){
 async function uploadMedia(slotKey,formEl){
   const file=formEl.querySelector('input[type="file"]').files[0];
   if(!file)return;
-  const fd=new FormData();fd.append('slot_key',slotKey);fd.append('upload',file);
+  const uploadBtn=formEl.querySelector('button');
+  uploadBtn.disabled=true;uploadBtn.textContent='Uploading…';
+  const isVid=/\.(mp4|webm|mov)$/i.test(slotKey);
+  const category=isVid?'media':'images';
+  const pathname=`${category}/${slotKey}`;
+  let r,j;
   try{
-    const r=await fetch('/api/media',{method:'POST',body:fd});
-    const j=await r.json();
-    if(j.ok){flash('Uploaded: '+slotKey);renderMedia();}
-    else flash(j.error||'Upload failed','err');
-  }catch{flash('Upload failed.','err');}
+    if(file.size>3*1024*1024){
+      if(!window.__blobUploadReady)await window.loadBlobUpload();
+      if(!window.__blobUpload)throw new Error('Blob SDK not available');
+      const blob=await window.__blobUpload(pathname,file,{
+        access:'public',
+        handleUploadUrl:'/api/media/handle',
+        contentType:file.type||(isVid?'video/mp4':'image/jpeg'),
+      });
+      r=await fetch('/api/media',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot_key:slotKey,url:blob.url})});
+      j=await r.json();
+    }else{
+      const fd=new FormData();fd.append('slot_key',slotKey);fd.append('upload',file);
+      r=await fetch('/api/media',{method:'POST',body:fd});
+      j=await r.json();
+    }
+    if(j.ok){flash('Uploaded: '+slotKey);}else{throw new Error(j.error||'Upload failed');}
+  }catch(e){
+    console.error(e);
+    flash(e&&e.message?e.message:'Upload failed.','err');
+  }
+  renderMedia();
 }
+window.__blobUploadReady=false;
+window.loadBlobUpload=function(){
+  if(window.__blobUploadReady)return Promise.resolve();
+  return import('https://esm.sh/@vercel/blob@2.8.0/client').then(m=>{
+    window.__blobUpload=m.upload;
+    window.__blobUploadReady=true;
+  }).catch(e=>{
+    console.error('blob sdk load failed',e);
+  });
+};
 
 window.renderDashboard=renderDashboard;
 window.viewApp=viewApp;
@@ -371,7 +402,7 @@ window.uploadMedia=uploadMedia;
 
 function render(){
   if(state.view==='login'){ app.innerHTML=renderLogin(); return; }
-  if(state.view==='media'){ renderMedia(); return; }
+  if(state.view==='media'){ renderMedia(); window.loadBlobUpload(); return; }
   renderDashboard();
 }
 window.render=render;
