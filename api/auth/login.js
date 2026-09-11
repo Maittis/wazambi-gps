@@ -11,8 +11,9 @@ module.exports = async function handler(req, res) {
   }
 
   try { await init(); } catch (err) {
+    console.error('DB init failed:', err);
     res.writeHead(500);
-    return res.end(JSON.stringify({ ok: false, error: 'Database not ready', detail: String(err && err.message || err) }));
+    return res.end(JSON.stringify({ ok: false, error: 'Database not ready. Please try again later.' }));
   }
 
   const data = await readJson(req);
