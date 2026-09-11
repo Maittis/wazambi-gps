@@ -1,4 +1,4 @@
-const { requireAuth, readJson } = require('../../_lib/auth');
+const { requireAuth, readJson } = require('../_lib/auth');
 const { handleUpload } = require('@vercel/blob/client');
 
 module.exports = async function handler(req, res) {

@@ -88,6 +88,7 @@ module.exports = async function handler(req, res) {
         access: 'public',
         contentType: uploadFile.mimetype || (isImage ? 'image/jpeg' : 'video/mp4'),
         addRandomSuffix: false,
+        allowOverwrite: true,
       });
 
       await sql`
