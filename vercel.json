@@ -1,0 +1,20 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "src": "/submit\\.php", "dest": "/api/submit.js" },
+    { "src": "/admin/login\\.php", "dest": "/admin/index.html" },
+    { "src": "/admin/index\\.php", "dest": "/admin/index.html" },
+    { "src": "/admin/view\\.php", "dest": "/admin/index.html" },
+    { "src": "/admin/export\\.php", "dest": "/api/applications/export.js" },
+    { "src": "/admin/media\\.php", "dest": "/admin/index.html" },
+    { "src": "/admin/logout\\.php", "dest": "/admin/index.html" },
+    { "src": "/admin/update_status\\.php", "dest": "/api/applications/update.js" }
+  ],
+  "headers": [
+    {
+      "source": "/images/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}

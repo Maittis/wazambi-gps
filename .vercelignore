@@ -1,0 +1,8 @@
+node_modules
+cv_uploads
+admin/*.php
+admin/assets
+admin/includes
+submit.php
+*.log
+images/docs

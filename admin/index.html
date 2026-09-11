@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wazambi GPS — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A1E3C;--navy-d:#061327;--yellow:#FFB400;--blue:#17A8FF;
+  --white:#FFFFFF;--ink:#0A1E3C;--gray:#B8C6DA;--line:rgba(255,255,255,.12);--radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,-apple-system,system-ui,sans-serif;background:#F4F6FA;color:var(--ink);line-height:1.55;min-height:100vh}
+a{color:var(--ink);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:260px;flex-shrink:0;background:var(--navy);color:var(--white);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
+.sidebar .brand{padding:24px 22px 20px;font-weight:900;font-size:20px;border-bottom:1px solid var(--line)}
+.sidebar .brand span{color:var(--yellow)}
+.sidebar nav{flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:4px}
+.sidebar nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:600;color:var(--gray);transition:background .15s,color .15s;cursor:pointer}
+.sidebar nav a:hover{background:rgba(255,255,255,.07);color:var(--white)}
+.sidebar nav a.active{background:var(--yellow);color:var(--navy);font-weight:800}
+.sidebar nav a .icon{width:20px;text-align:center;font-size:16px}
+.sidebar .side-foot{padding:16px 22px;border-top:1px solid var(--line);font-size:12px;color:#8FA2BC}
+.main{flex:1;margin-left:260px;min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:64px;background:#fff;border-bottom:1px solid #E5E8F1;display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:40}
+.topbar h1{font-size:17px;font-weight:800}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-right a{font-size:13px;font-weight:700;color:var(--ink);cursor:pointer}
+.content{flex:1;padding:28px 32px 48px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:32px}
+.stat-card{background:#fff;border:1px solid #E5E8F1;border-radius:var(--radius);padding:22px 24px;transition:border-color .15s,transform .15s}
+.stat-card:hover{border-color:var(--yellow);transform:translateY(-2px)}
+.stat-card .stat-num{font-size:34px;font-weight:900;color:var(--navy);line-height:1}
+.stat-card .stat-label{font-size:13px;font-weight:600;color:#8FA2BC;margin-top:6px}
+.panel{background:#fff;border:1px solid #E5E8F1;border-radius:var(--radius);overflow:hidden}
+.panel-head{padding:18px 24px;border-bottom:1px solid #E5E8F1;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.panel-head h2{font-size:17px;font-weight:800}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead{background:#F7F9FC}
+th{text-align:left;padding:13px 18px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8FA2BC;border-bottom:1px solid #E5E8F1}
+td{padding:14px 18px;border-bottom:1px solid #F0F2F8;vertical-align:middle}
+tr:hover td{background:rgba(255,180,0,.03)}
+td a{color:var(--ink);font-weight:700;cursor:pointer}
+.badge{display:inline-block;padding:4px 11px;border-radius:20px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:800;border:none;cursor:pointer;transition:transform .12s,background .12s}
+.btn:hover{transform:translateY(-1px)}
+.btn-y{background:var(--yellow);color:var(--navy)}
+.btn-b{background:var(--blue);color:#fff}
+.btn-p{background:#8B5CF6;color:#fff}
+.btn-g{background:#10B981;color:#fff}
+.btn-r{background:#EF4444;color:#fff}
+.btn-o{background:#F7F9FC;color:var(--ink);border:1.5px solid #D8E0EE}
+.detail-grid{display:grid;gap:0}
+.detail-grid dt{padding:13px 24px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8FA2BC;background:#F7F9FC;border-bottom:1px solid #E5E8F1}
+.detail-grid dd{padding:13px 24px;border-bottom:1px solid #F0F2F8}
+@media(min-width:700px){.detail-grid{grid-template-columns:1fr 1fr}.detail-grid dt{grid-column:1}.detail-grid dd{grid-column:2}}
+.actions-bar{padding:20px 24px;background:#F7F9FC;border-top:1px solid #E5E8F1;display:flex;gap:12px;flex-wrap:wrap}
+.note-box{margin:24px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:var(--radius);padding:20px 24px}
+.note-box h3{font-size:14px;font-weight:800;color:#92400E;margin-bottom:8px}
+.note-box textarea{width:100%;min-height:80px;padding:10px;border:1px solid #D8E0EE;border-radius:8px;font-family:inherit;font-size:14px}
+.note-box .btn{margin-top:10px}
+.filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filters input[type="text"]{padding:9px 13px;border:1.5px solid #D8E0EE;border-radius:8px;font-size:13px;font-family:inherit;background:#F7F9FC;width:220px}
+.pagination{padding:16px 24px;text-align:center}
+.pagination a,.pagination span{display:inline-block;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;margin:0 3px}
+.pagination a{background:#F7F9FC;color:var(--ink);cursor:pointer}
+.pagination a:hover{background:var(--yellow);color:var(--navy)}
+.pagination .current{background:var(--yellow);color:var(--navy)}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#8FA2BC;margin-bottom:20px;cursor:pointer}
+.back:hover{color:var(--ink)}
+.flash{padding:14px 20px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:20px}
+.flash-ok{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}
+.flash-err{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.login-wrap{min-height:100vh;background:radial-gradient(800px 400px at 40% -100px,rgba(23,168,255,.15),transparent 55%),var(--navy);display:flex;align-items:center;justify-content:center;padding:24px}
+.login-box{width:100%;max-width:420px;background:#fff;border-radius:var(--radius);padding:40px 36px;box-shadow:0 24px 60px rgba(0,0,0,.35);text-align:center}
+.login-box h1{font-size:24px;font-weight:900;margin-bottom:4px;color:var(--navy)}
+.login-box .sub{color:#8FA2BC;font-size:14px;margin-bottom:28px}
+.login-box label{display:block;text-align:left;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--navy)}
+.login-box input[type="text"],.login-box input[type="password"]{width:100%;padding:13px 14px;border:1.5px solid #D8E0EE;border-radius:10px;font-size:15px;font-family:inherit;margin-bottom:18px;background:#F7F9FC;color:var(--navy)}
+.login-box input:focus{outline:none;border-color:var(--yellow);box-shadow:0 0 0 4px rgba(255,180,0,.18);background:#fff}
+.login-box .btn{width:100%;padding:14px;font-size:15px;font-weight:900;border:none;border-radius:10px;background:var(--yellow);color:var(--navy);cursor:pointer}
+.login-box .btn:hover{background:#FFC93C}
+.err-msg{background:#FEE2E2;color:#991B1B;padding:12px 16px;border-radius:10px;font-size:14px;margin-bottom:20px;text-align:left}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.media-card{background:#fff;border:1px solid #E5E8F1;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.media-preview{height:150px;background:#F7F9FC;display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid #E5E8F1}
+.media-preview img{width:100%;height:100%;object-fit:cover}
+.media-preview .no-file{color:#B9C6DC;font-size:13px;font-weight:600}
+.media-body{padding:16px}
+.media-body h3{font-size:14px;font-weight:800;margin-bottom:2px}
+.media-body p{font-size:12px;color:#8FA2BC;margin-bottom:10px}
+.media-meta{font-size:11.5px;color:#52698F;margin-bottom:12px}
+.tag{display:inline-block;padding:3px 9px;border-radius:12px;font-weight:800;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em}
+.tag-ok{background:#D1FAE5;color:#065F46}
+.tag-no{background:#FEE2E2;color:#991B1B}
+.media-form label{display:block;font-size:12.5px;font-weight:700;margin-bottom:6px}
+.media-form input[type="file"]{width:100%;font-size:12px;padding:8px;border:1.5px dashed #D8E0EE;border-radius:8px;background:#F7F9FC;cursor:pointer}
+.media-form button{margin-top:10px;width:100%;padding:10px;border:none;border-radius:8px;background:var(--yellow);color:var(--navy);font-weight:800;font-size:13px;cursor:pointer}
+.msg{padding:14px 20px;border-radius:10px;font-size:14px;font-weight:600;margin-bottom:20px}
+.msg-ok{background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7}
+.msg-err{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.mut{color:#8FA2BC;font-size:12.5px}
+#loading{text-align:center;padding:60px;color:#8FA2BC;font-size:15px}
+@media(max-width:900px){
+  .sidebar{position:fixed;left:-260px;transition:left .25s}
+  .sidebar.open{left:0}
+  .main{margin-left:0}
+  .mobile-toggle{display:flex !important}
+  .content{padding:20px 16px 48px}
+  .topbar{padding:0 16px}
+  .panel-head{flex-direction:column;align-items:stretch}
+  .filters input[type="text"]{width:100%}
+  .stats{grid-template-columns:1fr 1fr}
+  .detail-grid{grid-template-columns:1fr}
+}
+.mobile-toggle{display:none;position:fixed;bottom:20px;right:20px;z-index:60;width:54px;height:54px;border-radius:50%;background:var(--yellow);color:var(--navy);font-size:24px;align-items:center;justify-content:center;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(255,180,0,.5)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const app=$('#app');
+
+let state={view:'login',user:null,flash:null,flashType:'ok'};
+const badgeColors={pending:['#FFB400','#0A1E3C'],shortlisted:['#17A8FF','#fff'],contacted:['#8B5CF6','#fff'],accepted:['#10B981','#fff'],rejected:['#EF4444','#fff']};
+function badge(s){const[c,f]=badgeColors[s]||['#6B7280','#fff'];return `<span class="badge" style="background:${c};color:${f}">${s[0].toUpperCase()+s.slice(1)}</span>`;}
+function yes(v){return v==='Yes'?'✅ Yes':'❌ No';}
+function rel(d){return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function relTime(d){return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit'});}
+
+async function api(url,opts={}){
+  const r=await fetch(url,{...opts,headers:{'Content-Type':'application/json',...(opts.headers||{})},body:opts.body?JSON.stringify(opts.body):undefined});
+  const j=await r.json();
+  return j;
+}
+
+async function authCheck(){const r=await fetch('/api/auth/me.js');const j=await r.json();if(j.ok){state.user=j.username;state.view='dashboard';}else{state.view='login';}render();}
+
+function flash(msg,type='ok'){state.flash=msg;state.flashType=type;}
+
+async function doLogin(e){
+  e.preventDefault();
+  const u=$('#lu').value,p=$('#lp').value;
+  const r=await api('/api/auth/login.js',{method:'POST',body:{username:u,password:p}});
+  if(r.ok){state.user=r.username;state.view='dashboard';flash('Logged in.');render();}
+  else{$('#lerr').textContent=r.error||'Login failed.';}
+}
+async function doLogout(){await fetch('/api/auth/logout.js');state.user=null;state.view='login';render();}
+
+function nav(view,label,icon){return `<a class="${state.view===view?'active':''}" onclick="state.view='${view}';render()"><span class="icon">${icon}</span> ${label}</a>`;}
+
+function renderShell(content){
+  if(state.view==='login')return renderLogin();
+  return `<div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">WAZAMBI<span>GPS</span></div>
+      <nav>
+        ${nav('dashboard','Dashboard','📊')}
+        ${nav('pending','Pending','⏳')}
+        ${nav('shortlisted','Shortlisted','⭐')}
+        ${nav('contacted','Contacted','📞')}
+        ${nav('accepted','Accepted','✅')}
+        ${nav('rejected','Rejected','❌')}
+        <a onclick="window.open('../','_blank')" style="margin-top:8px"><span class="icon">🌐</span> View landing page</a>
+        <a href="/api/applications/export.js" target="_blank" style="margin-top:4px"><span class="icon">📥</span> Export CSV</a>
+        <a class="${state.view==='media'?'active':''}" onclick="state.view='media';render()"><span class="icon">🖼️</span> Media manager</a>
+        <a onclick="doLogout()" style="margin-top:auto"><span class="icon">🚪</span> Logout</a>
+      </nav>
+      <div class="side-foot">Wazambi GPS Agent Panel</div>
+    </aside>
+    <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div class="main">
+      <div class="topbar"><h1>Agent Applications</h1><div class="topbar-right"><a onclick="state.view='dashboard';render()">Home</a><a onclick="doLogout()" style="color:#EF4444">Logout</a></div></div>
+      <div class="content">${content}</div>
+    </div>
+  </div>`;
+}
+
+function renderLogin(){
+  return `<div class="login-wrap"><div class="login-box">
+    <h1>WAZAMBI<span style="color:var(--yellow)">GPS</span></h1>
+    <p class="sub">Admin Panel</p>
+    <div class="err-msg" id="lerr" style="display:none"></div>
+    <form onsubmit="doLogin(event)">
+      <label for="lu">Username</label><input type="text" id="lu" required autofocus>
+      <label for="lp">Password</label><input type="password" id="lp" required>
+      <button type="submit" class="btn">Sign in →</button>
+    </form>
+  </div></div>`;
+}
+
+let _dashParams={status:'',q:'',page:1};
+async function loadDashboard(params){
+  const p={..._dashParams,...params};_dashParams=p;
+  const q=new URLSearchParams();if(p.status)q.set('status',p.status);if(p.q)q.set('q',p.q);if(p.page>1)q.set('page',p.page);
+  const r=await api('/api/applications/index.js?'+q);if(!r.ok)return;
+  state.stats=r.stats;state.rows=r.rows;state.totalRows=r.totalRows;state.totalPages=r.totalPages;state.dashPage=r.page;
+  state.dashStatus=p.status;state.dashQ=p.q;
+}
+
+async function renderDashboard(params){
+  state.view='dashboard';
+  if(params){_dashParams={status:params.status||'',q:params.q||'',page:1};}
+  app.innerHTML=renderShell('<div id="loading">Loading…</div>');
+  await loadDashboard();
+  const s=state.stats||{};
+  const rows=state.rows||[];
+  const sf=state.dashStatus||'';const sq=state.dashQ||'';const pg=state.dashPage||1;const tp=state.totalPages||1;const tr=state.totalRows||0;
+  let flashHtml='';if(state.flash){flashHtml=`<div class="flash flash-${state.flashType}">${state.flash}</div>`;state.flash=null;}
+
+  const statsHtml=`<div class="stats">
+    <div class="stat-card"><div class="stat-num">${s.total||0}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#FFB400">${s.pending||0}</div><div class="stat-label">Pending</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#17A8FF">${s.shortlisted||0}</div><div class="stat-label">Shortlisted</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#8B5CF6">${s.contacted||0}</div><div class="stat-label">Contacted</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#10B981">${s.accepted||0}</div><div class="stat-label">Accepted</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#EF4444">${s.rejected||0}</div><div class="stat-label">Rejected</div></div>
+  </div>`;
+
+  let tableHtml='';
+  if(!rows.length){tableHtml='<div style="padding:48px;text-align:center;color:#8FA2BC;font-size:15px">No applications found.</div>';}
+  else{tableHtml=`<table><thead><tr><th>ID</th><th>Name</th><th>Email / WhatsApp</th><th>Town</th><th>Vehicles/wk</th><th>Status</th><th>Applied</th></tr></thead><tbody>${
+    rows.map(r=>`<tr>
+      <td><a onclick="viewApp(${r.id})">${r.id}</a></td>
+      <td><a onclick="viewApp(${r.id})">${r.fullname}</a></td>
+      <td>${r.email}<br><span style="color:#8FA2BC;font-size:12.5px">${r.whatsapp}</span></td>
+      <td>${r.town}</td>
+      <td style="text-align:center">${r.weekly_customers}</td>
+      <td>${badge(r.status)}</td>
+      <td style="white-space:nowrap;color:#8FA2BC;font-size:13px">${rel(r.created_at)}</td>
+    </tr>`).join('')
+  }</tbody></table>`;}
+
+  let pagHtml='';
+  if(tp>1){let p='';
+    if(pg>1)p+=`<a onclick="renderDashboard({status:'${sf}',q:'${sq}',page:${pg-1}})">← Prev</a>`;
+    for(let i=Math.max(1,pg-2);i<=Math.min(tp,pg+2);i++){p+=i===pg?`<span class="current">${i}</span>`:`<a onclick="renderDashboard({status:'${sf}',q:'${sq}',page:${i}})">${i}</a>`;}
+    if(pg<tp)p+=`<a onclick="renderDashboard({status:'${sf}',q:'${sq}',page:${pg+1}})">Next →</a>`;
+    pagHtml=`<div class="pagination">${p}</div>`;
+  }
+
+  const sfLabel=sf?sf.charAt(0).toUpperCase()+sf.slice(1)+' applications':'All applications';
+  const content=`${flashHtml}${statsHtml}<div class="panel"><div class="panel-head"><h2>${sfLabel} <span style="font-weight:500;color:#8FA2BC;font-size:14px;margin-left:8px">(${tr})</span></h2><div class="filters">
+    <form onsubmit="event.preventDefault();renderDashboard({status:'${sf}',q:document.getElementById('sq').value})" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="sq" value="${sq}" placeholder="Search name, email, town…">
+      <button class="btn btn-y" style="padding:9px 16px;font-size:13px">Search</button>
+      ${sf?`<a onclick="renderDashboard({status:'',q:'${sq}'})" style="font-size:13px;color:#EF4444;cursor:pointer">Clear</a>`:''}
+    </form></div></div>${tableHtml}${pagHtml}</div>`;
+
+  app.innerHTML=renderShell(content);
+  document.addEventListener('click',e=>{if(window.innerWidth<=900&&!e.target.closest('.sidebar,.mobile-toggle'))$('#sidebar').classList.remove('open');});
+}
+
+async function viewApp(id){
+  app.innerHTML=renderShell('<div id="loading">Loading…</div>');
+  const r=await api('/api/applications/'+id+'.js');if(!r.ok){flash('Application not found.','err');return renderDashboard();}
+  const a=r.application;
+  const details=[
+    ['Full name',a.fullname],['WhatsApp',a.whatsapp],['Email',`<a href="mailto:${a.email}">${a.email}</a>`],
+    ['Town & Province',a.town],['18+ years old?',yes(a.age_18)],['Smartphone + internet?',yes(a.smartphone)],
+    ['Sales experience?',yes(a.sales_experience)],['Experience detail',a.experience_detail||'—'],
+    ['Sales methods',a.sales_methods],['Knows vehicle owners?',yes(a.knows_vehicles)],
+    ['Potential customers / week',`<strong>${a.weekly_customers}</strong>`],['How to find first 5 customers',a.first_five],
+    ['Why should Wazambi select you?',a.why_you],['Can attend both days?',yes(a.attend_both)],
+    ['Travel at own cost?',yes(a.travel_own_cost)],['Understands commission-based?',yes(a.understands_commission)],
+    ['Declaration accepted?',yes(a.agree_declaration)],
+    ['CV download',a.cv_filename?`<a href="${a.cv_filename}" target="_blank" style="color:var(--blue);font-weight:700">📄 Download CV</a>`:'—'],
+    ['Applied on',relTime(a.created_at)],['Last updated',relTime(a.updated_at)]
+  ];
+  const dGrid=details.map(([dt,dd])=>`<dt>${dt}</dt><dd>${dd}</dd>`).join('');
+
+  const statusBtns=['shortlisted','contacted','accepted','rejected','pending'].map(s=>{
+    const label={shortlisted:'⭐ Shortlist',contacted:'📞 Mark contacted',accepted:'✅ Accept',rejected:'❌ Reject',pending:'↺ Reset to pending'}[s];
+    const cls={shortlisted:'btn-b',contacted:'btn-p',accepted:'btn-g',rejected:'btn-r',pending:'btn-o'}[s];
+    return `<button class="btn ${cls}" ${a.status===s?'disabled':''} onclick="updateStatus(${a.id},'${s}')">${label}</button>`;
+  }).join('');
+
+  const flashHtml=state.flash?`<div class="flash flash-${state.flashType}">${state.flash}</div><br>`:'';
+
+  const content=`${flashHtml}
+  <a class="back" onclick="renderDashboard()">← Back to list</a>
+  <div class="panel" style="margin-bottom:24px"><div style="padding:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+    <div><h2 style="font-size:22px;font-weight:900">${a.fullname}</h2><p style="color:#8FA2BC;font-size:14px;margin-top:4px">${a.town} · Applied ${relTime(a.created_at)}</p></div>${badge(a.status)}
+  </div><div class="actions-bar" style="display:flex;gap:10px;flex-wrap:wrap">${statusBtns}</div></div>
+  <div class="panel" style="margin-bottom:24px"><div style="padding:18px 24px;border-bottom:1px solid #E5E8F1"><h3 style="font-size:16px;font-weight:800">Application Details</h3></div><dl class="detail-grid">${dGrid}</dl></div>
+  <div class="note-box"><h3>📝 Internal notes</h3>
+    <textarea id="notes" placeholder="Add a note about this applicant…">${a.notes||''}</textarea>
+    <button class="btn btn-y" onclick="saveNotes(${a.id})">Save notes</button>
+  </div>`;
+  app.innerHTML=renderShell(content);
+}
+
+async function updateStatus(id,status){
+  const r=await api('/api/applications/'+id+'.js',{method:'POST',body:{status}});
+  if(r.ok){flash(r.message);viewApp(id);}
+  else flash(r.error||'Failed','err');
+}
+async function saveNotes(id){
+  const notes=document.getElementById('notes').value;
+  const r=await api('/api/applications/'+id+'.js',{method:'POST',body:{action:'save_notes',notes}});
+  if(r.ok){flash('Notes saved.');viewApp(id);}
+  else flash(r.error||'Failed','err');
+}
+
+async function renderMedia(){
+  state.view='media';
+  app.innerHTML=renderShell('<div id="loading">Loading…</div>');
+  const r=await api('/api/media/index.js');if(!r.ok){app.innerHTML=renderShell('<p>Failed to load media.</p>');return;}
+  const media=r.media||[];
+  const mediaMap={};media.forEach(m=>{mediaMap[m.slot_key]=m;});
+
+  const imageSlots=[
+    ['hero-video-poster.jpg','Video poster'],['presenting.jpg','Sec 3 — Presenting Wazambi GPS'],
+    ['agents-learning.jpg','Sec 3 — Agents learning together'],['gps-installation.jpg','Sec 3 — GPS installation'],
+    ['mobile-platform.jpg','Sec 3 — Wazambi mobile platform'],['shop-office.jpg','Sec 9 — Your shop or office'],
+    ['technician-install.jpg','Sec 9 — Technicians installing'],['fleet-vehicles.jpg','Sec 9 — Fleet vehicles'],
+    ['gps-app.jpg','Sec 9 — GPS app'],['team.jpg','Sec 9 — Your team']
+  ];
+  const videoSlots=[['wazambi-promo.mp4','Hero promotional video']];
+
+  function slotCard(key,label,isVid){
+    const m=mediaMap[key];
+    const preview=m?`<img src="${m.blob_url}" alt="${key}">`:`<div class="no-file">not uploaded yet</div>`;
+    const meta=m?`<span class="tag tag-ok">✔ uploaded</span> · ${(m.file_size/1024/1024).toFixed(1)} MB`:`<span class="tag tag-no">✖ missing</span>`;
+    return `<div class="media-card"><div class="media-preview">${isVid&&m?`<video src="${m.blob_url}" controls></video>`:preview}</div>
+    <div class="media-body"><h3><code>${key}</code></h3><p>${label}</p>
+    <div class="media-meta">${meta}</div>
+    <form class="media-form" onsubmit="event.preventDefault();uploadMedia('${key}',this)"><label>Replace ${isVid?'video':'image'}</label>
+    <input type="file" name="upload" accept="${isVid?'.mp4,.webm,.mov':'.jpg,.jpeg,.png,.webp'}" required>
+    <button type="submit">Upload →</button></form></div></div>`;
+  }
+
+  const imgGrid=imageSlots.map(([k,l])=>slotCard(k,l,false)).join('');
+  const vidGrid=videoSlots.map(([k,l])=>slotCard(k,l,true)).join('');
+
+  const flashMsg=state.flash?`<div class="msg msg-${state.flashType}">${state.flash}</div>`:'';state.flash=null;
+
+  const content=`<a class="back" onclick="renderDashboard()">← Back to dashboard</a>
+  <div class="panel" style="margin-bottom:24px"><div class="panel-head"><h2>🖼️ Landing Page Media</h2><span class="mut">Upload or replace each image / video.</span></div></div>
+  ${flashMsg}
+  <h2 style="font-size:17px;font-weight:800;margin-bottom:6px">Images</h2><p class="mut" style="margin-bottom:18px">Recommended: 16:9, min 1200px wide, JPG or PNG. Max 15 MB each.</p>
+  <div class="media-grid" style="margin-bottom:36px">${imgGrid}</div>
+  <h2 style="font-size:17px;font-weight:800;margin-bottom:6px">Hero video</h2><p class="mut" style="margin-bottom:18px">MP4 (H.264), max 300 MB.</p>
+  <div class="media-grid">${vidGrid}</div>`;
+  app.innerHTML=renderShell(content);
+}
+
+async function uploadMedia(slotKey,formEl){
+  const file=formEl.querySelector('input[type="file"]').files[0];
+  if(!file)return;
+  const fd=new FormData();fd.append('slot_key',slotKey);fd.append('upload',file);
+  try{
+    const r=await fetch('/api/media/index.js',{method:'POST',body:fd});
+    const j=await r.json();
+    if(j.ok){flash('Uploaded: '+slotKey);renderMedia();}
+    else flash(j.error||'Upload failed','err');
+  }catch{flash('Upload failed.','err');}
+}
+
+window.renderDashboard=renderDashboard;
+window.viewApp=viewApp;
+window.updateStatus=updateStatus;
+window.saveNotes=saveNotes;
+window.renderMedia=renderMedia;
+window.uploadMedia=uploadMedia;
+
+document.addEventListener('click',e=>{if(window.innerWidth<=900&&!e.target.closest('.sidebar,.mobile-toggle')){const sb=document.getElementById('sidebar');if(sb)sb.classList.remove('open');}});
+
+authCheck();
+</script>
+</body>
+</html>

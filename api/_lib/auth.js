@@ -1,0 +1,50 @@
+const crypto = require('crypto');
+const SECRET = process.env.SESSION_SECRET || 'wazambi-default-secret-change-me';
+
+function sign(payload) {
+  const json = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const sig = crypto.createHmac('sha256', SECRET).update(json).digest('base64url');
+  return `${json}.${sig}`;
+}
+
+function verify(cookie) {
+  if (!cookie) return null;
+  const [json, sig] = cookie.split('.');
+  if (!json || !sig) return null;
+  const expected = crypto.createHmac('sha256', SECRET).update(json).digest('base64url');
+  if (sig !== expected) return null;
+  try {
+    const data = JSON.parse(Buffer.from(json, 'base64url').toString());
+    if (data.exp && data.exp < Date.now()) return null;
+    return data;
+  } catch { return null; }
+}
+
+function getCookie(req, name) {
+  const raw = req.headers.cookie || '';
+  const match = raw.split(';').map(s => s.trim()).find(s => s.startsWith(name + '='));
+  return match ? match.split('=').slice(1).join('=') : null;
+}
+
+function requireAuth(req, res) {
+  const token = getCookie(req, 'wz_session');
+  const data = verify(token);
+  if (!data) {
+    res.writeHead(401, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: false, error: 'Not authenticated' }));
+    return null;
+  }
+  return data;
+}
+
+function setSessionCookie(res, adminId, username) {
+  const value = sign({ adminId, username, exp: Date.now() + 7 * 86400000 });
+  const cookie = `wz_session=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 86400}`;
+  res.setHeader('Set-Cookie', cookie);
+}
+
+function clearSessionCookie(res) {
+  res.setHeader('Set-Cookie', 'wz_session=; Path=/; HttpOnly; Max-Age=0');
+}
+
+module.exports = { sign, verify, getCookie, requireAuth, setSessionCookie, clearSessionCookie };
