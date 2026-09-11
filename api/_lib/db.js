@@ -16,13 +16,8 @@ async function sql(strings, ...values) {
   for (let i = 0; i < values.length; i++) {
     text += '$' + (i + 1) + strings[i + 1];
   }
-  try {
-    const result = await client.query(text, values);
-    return result.rows;
-  } catch (err) {
-    err.message += ` | SQL: ${text}`;
-    throw err;
-  }
+  const result = await client.query(text, values);
+  return result.rows;
 }
 
 async function sqlOne(strings, ...values) {

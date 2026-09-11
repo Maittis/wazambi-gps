@@ -98,7 +98,7 @@ module.exports = async function handler(req, res) {
         (${get('fullname')}, ${get('whatsapp')}, ${get('email')}, ${get('town')},
          ${get('age_18')}, ${get('smartphone')}, ${get('sales_experience')},
          ${get('experience_detail')}, ${get('sales_methods')}, ${get('knows_vehicles')},
-         parseInt(get('weekly_customers')) || 0, ${get('first_five')}, ${get('why_you')},
+         ${parseInt(get('weekly_customers')) || 0}, ${get('first_five')}, ${get('why_you')},
          ${get('attend_both')}, ${get('travel_own_cost')}, ${get('understands_commission')},
          ${cvBlobUrl}, ${get('agree_declaration')})
     `;
@@ -107,6 +107,6 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('Insert error:', err);
     res.writeHead(500);
-    return res.end(JSON.stringify({ ok: false, errors: ['Failed to save application. Please try again.'], detail: String(err && err.message || err) }));
+    return res.end(JSON.stringify({ ok: false, errors: ['Failed to save application. Please try again.'] }));
   }
 };
