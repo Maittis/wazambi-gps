@@ -139,18 +139,18 @@ async function api(url,opts={}){
   return j;
 }
 
-async function authCheck(){const r=await fetch('/api/auth/me.js');const j=await r.json();if(j.ok){state.user=j.username;state.view='dashboard';}else{state.view='login';}render();}
+async function authCheck(){const r=await fetch('/api/auth/me');const j=await r.json();if(j.ok){state.user=j.username;state.view='dashboard';}else{state.view='login';}render();}
 
 function flash(msg,type='ok'){state.flash=msg;state.flashType=type;}
 
 async function doLogin(e){
   e.preventDefault();
   const u=$('#lu').value,p=$('#lp').value;
-  const r=await api('/api/auth/login.js',{method:'POST',body:{username:u,password:p}});
+  const r=await api('/api/auth/login',{method:'POST',body:{username:u,password:p}});
   if(r.ok){state.user=r.username;state.view='dashboard';flash('Logged in.');render();}
   else{$('#lerr').textContent=r.error||'Login failed.';}
 }
-async function doLogout(){await fetch('/api/auth/logout.js');state.user=null;state.view='login';render();}
+async function doLogout(){await fetch('/api/auth/logout');state.user=null;state.view='login';render();}
 
 function nav(view,label,icon){return `<a class="${state.view===view?'active':''}" onclick="state.view='${view}';render()"><span class="icon">${icon}</span> ${label}</a>`;}
 
@@ -167,7 +167,7 @@ function renderShell(content){
         ${nav('accepted','Accepted','✅')}
         ${nav('rejected','Rejected','❌')}
         <a onclick="window.open('../','_blank')" style="margin-top:8px"><span class="icon">🌐</span> View landing page</a>
-        <a href="/api/applications/export.js" target="_blank" style="margin-top:4px"><span class="icon">📥</span> Export CSV</a>
+        <a href="/api/applications/export" target="_blank" style="margin-top:4px"><span class="icon">📥</span> Export CSV</a>
         <a class="${state.view==='media'?'active':''}" onclick="state.view='media';render()"><span class="icon">🖼️</span> Media manager</a>
         <a onclick="doLogout()" style="margin-top:auto"><span class="icon">🚪</span> Logout</a>
       </nav>
@@ -198,7 +198,7 @@ let _dashParams={status:'',q:'',page:1};
 async function loadDashboard(params){
   const p={..._dashParams,...params};_dashParams=p;
   const q=new URLSearchParams();if(p.status)q.set('status',p.status);if(p.q)q.set('q',p.q);if(p.page>1)q.set('page',p.page);
-  const r=await api('/api/applications/index.js?'+q);if(!r.ok)return;
+  const r=await api('/api/applications?'+q);if(!r.ok)return;
   state.stats=r.stats;state.rows=r.rows;state.totalRows=r.totalRows;state.totalPages=r.totalPages;state.dashPage=r.page;
   state.dashStatus=p.status;state.dashQ=p.q;
 }
@@ -310,7 +310,7 @@ async function saveNotes(id){
 async function renderMedia(){
   state.view='media';
   app.innerHTML=renderShell('<div id="loading">Loading…</div>');
-  const r=await api('/api/media/index.js');if(!r.ok){app.innerHTML=renderShell('<p>Failed to load media.</p>');return;}
+  const r=await api('/api/media');if(!r.ok){app.innerHTML=renderShell('<p>Failed to load media.</p>');return;}
   const media=r.media||[];
   const mediaMap={};media.forEach(m=>{mediaMap[m.slot_key]=m;});
 
@@ -355,7 +355,7 @@ async function uploadMedia(slotKey,formEl){
   if(!file)return;
   const fd=new FormData();fd.append('slot_key',slotKey);fd.append('upload',file);
   try{
-    const r=await fetch('/api/media/index.js',{method:'POST',body:fd});
+    const r=await fetch('/api/media',{method:'POST',body:fd});
     const j=await r.json();
     if(j.ok){flash('Uploaded: '+slotKey);renderMedia();}
     else flash(j.error||'Upload failed','err');

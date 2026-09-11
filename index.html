@@ -566,13 +566,46 @@
   .footer-inner .logo{ justify-content:center; }
   footer p{ font-size:12.5px; color:var(--gray-2); max-width:760px; margin:0 auto; }
 
-  /* ============ DESKTOP UPGRADES ============ */
-  @media(min-width:960px){
-    .section{ padding:120px 0; }
-    .nav-links{ display:flex; }
-    .nav-cta{ display:inline-flex; }
-    .hamburger{ display:none; }
+  /* ============ MOBILE & TABLET BREAKPOINTS ============ */
+  @media(max-width:920px){
+    h1{ font-size:clamp(32px,9vw,48px); }
+    h2{ font-size:clamp(26px,7vw,40px); }
+    .section{ padding:64px 0; }
+    .final{ padding:76px 0; }
+    .hero{ padding:52px 0 72px; }
+    .cards.grid-4, .steps.grid-4{ grid-template-columns:1fr 1fr; }
+    .photo-grid.grid-5{ grid-template-columns:repeat(3,1fr); }
+    .photo img{ height:200px; }
+    .form-box, .success{ padding:28px 20px; }
   }
+  @media(max-width:640px){
+    .announce{ justify-content:center; text-align:center; gap:4px 14px; padding:9px 16px; }
+    .announce p:first-of-type{ margin-right:0; }
+    .cards.grid-4, .steps.grid-4{ grid-template-columns:1fr; }
+    .photo-grid.grid-4, .photo-grid.grid-5{ grid-template-columns:1fr 1fr; }
+    .photo img{ height:150px; }
+    .highlight{ padding:30px 20px; }
+    .form-grid{ grid-template-columns:1fr; }
+    .radio-group{ grid-template-columns:1fr; }
+    .split{ gap:28px; }
+    .btn{ width:100%; justify-content:center; font-size:13px; padding:17px 28px; }
+    .hero .btn{ width:100%; max-width:340px; margin-left:auto; margin-right:auto; }
+    .hero-video{ margin:34px auto 6px; }
+    .sel{ grid-template-columns:1fr; }
+  }
+  @media(min-width:641px) and (max-width:920px){
+    .photo-grid.grid-4{ grid-template-columns:repeat(2,1fr); }
+    .faq{ max-width:100%; }
+  }
+
+  /* ============ REVEAL ANIMATIONS ============ */
+  .to-reveal{ opacity:0; transform:translateY(20px) scale(.995); transition:opacity .6s cubic-bezier(.22,.9,.35,1), transform .6s cubic-bezier(.22,.9,.35,1); will-change:opacity,transform; }
+  .to-reveal.revealed{ opacity:1; transform:none; }
+  .to-reveal .stagger{ opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease; }
+  .to-reveal.revealed .stagger{ opacity:1; transform:none; }
+  .reveal-delay-1{ transition-delay:80ms; }
+  .reveal-delay-2{ transition-delay:160ms; }
+  .reveal-delay-3{ transition-delay:240ms; }
 </style>
 </head>
 
@@ -1258,6 +1291,46 @@
     });
 
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ── Scroll reveal (lightweight) ─────────────────────────────────── */
+    (function(){
+      const selectors = [
+        '.hero .container',
+        '.announce',
+        '.photo-grid .photo',
+        '.cards .card',
+        '.steps .step',
+        '.form-box',
+        '.final .container',
+        '.faq .faq-item'
+      ];
+
+      const elems = document.querySelectorAll(selectors.join(','));
+      elems.forEach(el => el.classList.add('to-reveal'));
+
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            // stagger child elements for nicer effect
+            const children = Array.from(el.querySelectorAll('.photo, .card, .step, figure, .stagger'));
+            if (children.length) {
+              children.forEach((c, i) => {
+                c.style.transitionDelay = (i * 80) + 'ms';
+                c.classList.add('stagger');
+              });
+            }
+            el.classList.add('revealed');
+            obs.unobserve(el);
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        elems.forEach(e => io.observe(e));
+      } else {
+        // fallback: reveal everything
+        elems.forEach(e => e.classList.add('revealed'));
+      }
+    })();
   </script>
 
 </body>
