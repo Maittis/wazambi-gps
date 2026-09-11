@@ -14,6 +14,14 @@ module.exports = async function handler(req, res) {
     out.initOk = false;
     out.error = String(err && err.message || err);
   }
+  out.reqInfo = {
+    contentType: req.headers['content-type'] || null,
+    method: req.method,
+    hasBodyProp: 'body' in req,
+    bodyIsBuffer: Buffer.isBuffer(req.body),
+    bodyType: typeof req.body,
+    bodyLength: req.body ? (req.body.length !== undefined ? req.body.length : null) : null,
+  };
   if (process.env.DATABASE_URL) {
     const pool = new Pool({ connectionString: process.env.DATABASE_URL, connectionTimeoutMillis: 8000, max: 1 });
     try {
