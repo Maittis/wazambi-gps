@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('Parse error:', err);
     res.writeHead(400);
-    return res.end(JSON.stringify({ ok: false, errors: ['Failed to parse form data.'] }));
+    return res.end(JSON.stringify({ ok: false, errors: ['Failed to parse form data.'], detail: String(err && err.message || err) }));
   }
 
   const get = (k) => {
