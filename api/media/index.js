@@ -59,7 +59,7 @@ module.exports = async function handler(req, res) {
     const blobName = `${category}/${slotKey}`;
 
     try {
-      const blob = await put(blobName, uploadFile, {
+      const blob = await put(blobName, fs.createReadStream(uploadFile.filepath), {
         access: 'public',
         contentType: uploadFile.mimetype || (isImage ? 'image/jpeg' : 'video/mp4'),
         addRandomSuffix: false,

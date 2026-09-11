@@ -1,5 +1,6 @@
 const { init, sql } = require('./_lib/db');
 const formidable = require('formidable');
+const fs = require('fs');
 const { put } = require('@vercel/blob');
 
 module.exports = async function handler(req, res) {
@@ -80,7 +81,7 @@ module.exports = async function handler(req, res) {
   const cvName = `cv_${Date.now()}_${Math.random().toString(36).slice(2,8)}.pdf`;
   let cvBlobUrl = null;
   try {
-    const blob = await put(`cvs/${cvName}`, cvFile, {
+    const blob = await put(`cvs/${cvName}`, fs.createReadStream(cvFile.filepath), {
       access: 'public',
       contentType: 'application/pdf',
     });

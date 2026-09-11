@@ -48,7 +48,7 @@ async function ensureSchema() {
       attend_both           VARCHAR(10)  NOT NULL DEFAULT 'No',
       travel_own_cost       VARCHAR(10)  NOT NULL DEFAULT 'No',
       understands_commission VARCHAR(10) NOT NULL DEFAULT 'No',
-      cv_filename           VARCHAR(255) DEFAULT NULL,
+      cv_filename           TEXT         DEFAULT NULL,
       agree_declaration     VARCHAR(10)  NOT NULL DEFAULT 'No',
       status                VARCHAR(20)  NOT NULL DEFAULT 'pending',
       notes                 TEXT         DEFAULT NULL,

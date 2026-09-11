@@ -258,7 +258,7 @@ async function renderDashboard(params){
 
 async function viewApp(id){
   app.innerHTML=renderShell('<div id="loading">Loading…</div>');
-  const r=await api('/api/applications/'+id+'.js');if(!r.ok){flash('Application not found.','err');return renderDashboard();}
+  const r=await api('/api/applications/'+id);if(!r.ok){flash('Application not found.','err');return renderDashboard();}
   const a=r.application;
   const details=[
     ['Full name',a.fullname],['WhatsApp',a.whatsapp],['Email',`<a href="mailto:${a.email}">${a.email}</a>`],
@@ -296,13 +296,13 @@ async function viewApp(id){
 }
 
 async function updateStatus(id,status){
-  const r=await api('/api/applications/'+id+'.js',{method:'POST',body:{status}});
+  const r=await api('/api/applications/'+id,{method:'POST',body:{status}});
   if(r.ok){flash(r.message);viewApp(id);}
   else flash(r.error||'Failed','err');
 }
 async function saveNotes(id){
   const notes=document.getElementById('notes').value;
-  const r=await api('/api/applications/'+id+'.js',{method:'POST',body:{action:'save_notes',notes}});
+  const r=await api('/api/applications/'+id,{method:'POST',body:{action:'save_notes',notes}});
   if(r.ok){flash('Notes saved.');viewApp(id);}
   else flash(r.error||'Failed','err');
 }
@@ -369,6 +369,12 @@ window.saveNotes=saveNotes;
 window.renderMedia=renderMedia;
 window.uploadMedia=uploadMedia;
 
+function render(){
+  if(state.view==='login'){ app.innerHTML=renderLogin(); return; }
+  if(state.view==='media'){ renderMedia(); return; }
+  renderDashboard();
+}
+window.render=render;
 document.addEventListener('click',e=>{if(window.innerWidth<=900&&!e.target.closest('.sidebar,.mobile-toggle')){const sb=document.getElementById('sidebar');if(sb)sb.classList.remove('open');}});
 
 authCheck();
