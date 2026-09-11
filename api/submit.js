@@ -107,6 +107,6 @@ module.exports = async function handler(req, res) {
   } catch (err) {
     console.error('Insert error:', err);
     res.writeHead(500);
-    return res.end(JSON.stringify({ ok: false, errors: ['Failed to save application. Please try again.'] }));
+    return res.end(JSON.stringify({ ok: false, errors: ['Failed to save application. Please try again.'], detail: String(err && err.message || err) }));
   }
 };
