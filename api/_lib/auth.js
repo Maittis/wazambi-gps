@@ -47,4 +47,14 @@ function clearSessionCookie(res) {
   res.setHeader('Set-Cookie', 'wz_session=; Path=/; HttpOnly; Max-Age=0');
 }
 
-module.exports = { sign, verify, getCookie, requireAuth, setSessionCookie, clearSessionCookie };
+async function readJson(req) {
+  if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
+  if (req.body) {
+    try { return JSON.parse(req.body.toString()); } catch { return {}; }
+  }
+  let body = '';
+  for await (const chunk of req) body += chunk;
+  try { return JSON.parse(body); } catch { return {}; }
+}
+
+module.exports = { sign, verify, getCookie, requireAuth, setSessionCookie, clearSessionCookie, readJson };

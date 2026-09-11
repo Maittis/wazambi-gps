@@ -1,5 +1,5 @@
 const { init, sql, sqlOne } = require('../_lib/db');
-const { requireAuth } = require('../_lib/auth');
+const { requireAuth, readJson } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -23,10 +23,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (req.method === 'PATCH' || req.method === 'POST') {
-    let body = '';
-    for await (const chunk of req) body += chunk;
-    let data;
-    try { data = JSON.parse(body); } catch { data = {}; }
+    const data = await readJson(req);
 
     const allowed = ['pending','shortlisted','contacted','accepted','rejected'];
 

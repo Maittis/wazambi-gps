@@ -1,5 +1,5 @@
 const { init, sql } = require('../_lib/db');
-const { requireAuth } = require('../_lib/auth');
+const { requireAuth, readJson } = require('../_lib/auth');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -11,10 +11,7 @@ module.exports = async function handler(req, res) {
     return res.end(JSON.stringify({ ok: false, error: 'Database not ready' }));
   }
 
-  let body = '';
-  for await (const chunk of req) body += chunk;
-  let data;
-  try { data = JSON.parse(body); } catch { data = {}; }
+  const data = await readJson(req);
 
   const id = parseInt(data.id);
   if (!id) { res.writeHead(400); return res.end(JSON.stringify({ ok: false, error: 'Invalid ID' })); }

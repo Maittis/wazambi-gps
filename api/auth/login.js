@@ -1,5 +1,5 @@
 const { init, sqlOne } = require('../_lib/db');
-const { setSessionCookie } = require('../_lib/auth');
+const { setSessionCookie, readJson } = require('../_lib/auth');
 const bcrypt = require('bcryptjs');
 
 module.exports = async function handler(req, res) {
@@ -15,10 +15,7 @@ module.exports = async function handler(req, res) {
     return res.end(JSON.stringify({ ok: false, error: 'Database not ready' }));
   }
 
-  let body = '';
-  for await (const chunk of req) body += chunk;
-  let data;
-  try { data = JSON.parse(body); } catch { data = {}; }
+  const data = await readJson(req);
 
   const username = (data.username || '').trim();
   const password = data.password || '';
