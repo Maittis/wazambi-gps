@@ -57,4 +57,35 @@ async function readJson(req) {
   try { return JSON.parse(body); } catch { return {}; }
 }
 
-module.exports = { sign, verify, getCookie, requireAuth, setSessionCookie, clearSessionCookie, readJson };
+async function readJson(req) {
+  if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
+  if (req.body) {
+    try { return JSON.parse(req.body.toString()); } catch { return {}; }
+  }
+  let body = '';
+  for await (const chunk of req) body += chunk;
+  try { return JSON.parse(body); } catch { return {}; }
+}
+
+async function readBody(req) {
+  if (req.body && Buffer.isBuffer(req.body)) return req.body;
+  if (req.body && typeof req.body === 'string') return Buffer.from(req.body);
+  const chunks = [];
+  for await (const chunk of req) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)));
+  return Buffer.concat(chunks);
+}
+
+async function parseMultipart(req, form) {
+  const { PassThrough } = require('stream');
+  const buffer = await readBody(req);
+  const stream = new PassThrough();
+  stream.headers = req.headers;
+  stream.write(buffer);
+  stream.end();
+  const [fields, files] = await new Promise((resolve, reject) => {
+    form.parse(stream, (err, fields, files) => (err ? reject(err) : resolve([fields, files])));
+  });
+  return { fields, files };
+}
+
+module.exports = { sign, verify, getCookie, requireAuth, setSessionCookie, clearSessionCookie, readJson, readBody, parseMultipart };

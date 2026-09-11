@@ -2,6 +2,7 @@ const { init, sql } = require('./_lib/db');
 const formidable = require('formidable');
 const fs = require('fs');
 const { put } = require('@vercel/blob');
+const { parseMultipart } = require('./_lib/auth');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
@@ -35,13 +36,7 @@ module.exports = async function handler(req, res) {
       filter: ({ mimetype }) => mimetype === 'application/pdf',
     });
 
-    const [f, files] = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve([fields, files]);
-      });
-    });
-
+    const { fields: f, files } = await parseMultipart(req, form);
     fields = f;
     cvFile = files.cv ? files.cv[0] : null;
   } catch (err) {

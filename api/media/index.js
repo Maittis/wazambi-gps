@@ -1,6 +1,7 @@
 const { init, sql, sqlOne } = require('../_lib/db');
-const { requireAuth } = require('../_lib/auth');
+const { requireAuth, parseMultipart } = require('../_lib/auth');
 const formidable = require('formidable');
+const fs = require('fs');
 const { put } = require('@vercel/blob');
 
 module.exports = async function handler(req, res) {
@@ -29,14 +30,9 @@ module.exports = async function handler(req, res) {
     let fields = {};
     let uploadFile = null;
     try {
-      const [f, files] = await new Promise((resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-          if (err) reject(err);
-          else resolve([fields, files]);
-        });
-      });
-      fields = f;
-      uploadFile = files.upload ? files.upload[0] : null;
+      const res2 = await parseMultipart(req, form);
+      fields = res2.fields;
+      uploadFile = res2.files.upload ? res2.files.upload[0] : null;
     } catch (err) {
       res.writeHead(400);
       return res.end(JSON.stringify({ ok: false, error: 'Failed to parse upload' }));
