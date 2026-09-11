@@ -1,4 +1,4 @@
-const { init, sqlOne } = require('../_lib/db');
+const { init, sqlOne } = require('./_lib/db');
 
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
