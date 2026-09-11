@@ -12,7 +12,7 @@ module.exports = async function handler(req, res) {
 
   try { await init(); } catch (err) {
     res.writeHead(500);
-    return res.end(JSON.stringify({ ok: false, error: 'Database not ready' }));
+    return res.end(JSON.stringify({ ok: false, error: 'Database not ready', detail: String(err && err.message || err) }));
   }
 
   const data = await readJson(req);
