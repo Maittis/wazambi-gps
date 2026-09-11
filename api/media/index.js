@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
     } catch (err) {
       console.error('Upload failed:', err);
       res.writeHead(500);
-      return res.end(JSON.stringify({ ok: false, error: 'Upload failed', detail: String(err && err.message || err) }));
+      return res.end(JSON.stringify({ ok: false, error: 'Upload failed' }));
     }
   }
 
