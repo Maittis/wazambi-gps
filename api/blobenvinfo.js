@@ -8,9 +8,8 @@ module.exports = async function handler(req, res) {
   const token = process.env.BLOB_READ_WRITE_TOKEN || '';
   let tokenStoreId = null;
   try {
-    const { parseStoreIdFromReadWriteToken } = require('@vercel/blob/dist/index.cjs');
-    tokenStoreId = parseStoreIdFromReadWriteToken(token);
-  } catch (e) { tokenStoreId = 'parse error: ' + e.message; }
+    tokenStoreId = token.split('_')[3] || '';
+  } catch (e) { tokenStoreId = 'parse error'; }
   res.end(JSON.stringify({
     BLOB_READ_WRITE_TOKEN: peek('BLOB_READ_WRITE_TOKEN'),
     BLOB_STORE_ID: peek('BLOB_STORE_ID'),
