@@ -2,14 +2,14 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "src": "/submit\\.php", "dest": "/api/submit.js" },
-    { "src": "/admin/login\\.php", "dest": "/admin/index.html" },
-    { "src": "/admin/index\\.php", "dest": "/admin/index.html" },
-    { "src": "/admin/view\\.php", "dest": "/admin/index.html" },
-    { "src": "/admin/export\\.php", "dest": "/api/applications/export.js" },
-    { "src": "/admin/media\\.php", "dest": "/admin/index.html" },
-    { "src": "/admin/logout\\.php", "dest": "/admin/index.html" },
-    { "src": "/admin/update_status\\.php", "dest": "/api/applications/update.js" }
+    { "source": "/submit\\.php", "destination": "/api/submit" },
+    { "source": "/admin/login\\.php", "destination": "/admin/index.html" },
+    { "source": "/admin/index\\.php", "destination": "/admin/index.html" },
+    { "source": "/admin/view\\.php", "destination": "/admin/index.html" },
+    { "source": "/admin/export\\.php", "destination": "/api/applications/export" },
+    { "source": "/admin/media\\.php", "destination": "/admin/index.html" },
+    { "source": "/admin/logout\\.php", "destination": "/admin/index.html" },
+    { "source": "/admin/update_status\\.php", "destination": "/api/applications/update" }
   ],
   "headers": [
     {
