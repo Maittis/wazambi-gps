@@ -36,6 +36,17 @@ $fields = [
 
 $data = [];
 foreach ($fields as $key => $filter) {
+    // Multi-value checkbox fields (e.g. sales_methods) arrive as arrays
+    if (isset($_POST[$key]) && is_array($_POST[$key])) {
+        $vals = array_map(function ($v) {
+            return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
+        }, $_POST[$key]);
+        $vals = array_values(array_filter($vals, function ($v) {
+            return $v !== '';
+        }));
+        $data[$key] = implode(', ', $vals);
+        continue;
+    }
     $data[$key] = filter_input(INPUT_POST, $key, $filter);
 }
 
