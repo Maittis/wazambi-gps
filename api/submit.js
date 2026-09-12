@@ -50,6 +50,13 @@ module.exports = async function handler(req, res) {
     return Array.isArray(v) ? v[0] : (v || '');
   };
 
+  // Join multi-value checkbox fields into comma-separated strings
+  for (const k of Object.keys(fields)) {
+    if (Array.isArray(fields[k])) {
+      fields[k] = fields[k].filter(v => v && v !== '').join(', ');
+    }
+  }
+
   const required = ['fullname','whatsapp','email','town','age_18','smartphone',
     'sales_experience','sales_methods','knows_vehicles',
     'weekly_customers','first_five','why_you',

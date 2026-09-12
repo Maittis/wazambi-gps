@@ -39,9 +39,9 @@
     --bg-deep:   #0e0f1e;
     --ink:       #131628;
     --white:     #FFFFFF;
-    --purple:    #7000FF;
-    --purple-2:  #9B6BFF;
-    --grad:      linear-gradient(120deg,#9B6BFF 0%,#7000FF 100%);
+    --purple:    #0E6EFF;
+    --purple-2:  #5BA8FF;
+    --grad:      linear-gradient(120deg,#5BA8FF 0%,#0E6EFF 100%);
     --yellow:    #f6d234;
     --gold:      #ffaa00;
     --red:       #ff3b3b;
@@ -85,7 +85,7 @@
     height:420px;
     left:-90px;
     top:120px;
-    background:radial-gradient(circle, rgba(155,107,255,.28) 0%, rgba(155,107,255,0) 65%);
+    background:radial-gradient(circle, rgba(91,168,255,.24) 0%, rgba(91,168,255,0) 65%);
     animation:floatOrb 18s ease-in-out infinite alternate;
   }
 
@@ -348,8 +348,8 @@
   .hero{
     position:relative;
     background:
-      radial-gradient(800px 460px at 15% -10%, rgba(112,0,255,.30) 0%, transparent 60%),
-      radial-gradient(700px 420px at 90% 110%, rgba(246,210,52,.10) 0%, transparent 55%),
+      radial-gradient(800px 460px at 15% -10%, rgba(14,110,255,.26) 0%, transparent 60%),
+      radial-gradient(700px 420px at 90% 110%, rgba(255,180,0,.08) 0%, transparent 55%),
       var(--bg);
     padding:82px 0 100px;
     overflow:hidden;
@@ -386,7 +386,7 @@
     aspect-ratio:1;
     transform:translate(-50%,-50%);
     border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(246,210,52,.28) 0deg, rgba(155,107,255,0) 60deg, rgba(155,107,255,.28) 180deg, rgba(246,210,52,0) 300deg, rgba(246,210,52,.28) 360deg);
+    background:conic-gradient(from 0deg, rgba(255,180,0,.24) 0deg, rgba(14,110,255,0) 60deg, rgba(14,110,255,.24) 180deg, rgba(255,180,0,0) 300deg, rgba(255,180,0,.24) 360deg);
     -webkit-mask:radial-gradient(farthest-side, transparent 62%, #000 63%);
     mask:radial-gradient(farthest-side, transparent 62%, #000 63%);
     opacity:.55;
@@ -397,7 +397,7 @@
   .hero .ring::after{
     content:"";
     position:absolute; inset:0; border-radius:50%;
-    background:conic-gradient(from 90deg, rgba(246,210,52,.1) 0deg, rgba(246,210,52,0) 120deg, rgba(246,210,52,.1) 240deg, rgba(246,210,52,0) 360deg);
+    background:conic-gradient(from 90deg, rgba(255,180,0,.08) 0deg, rgba(255,180,0,0) 120deg, rgba(255,180,0,.08) 240deg, rgba(255,180,0,0) 360deg);
     -webkit-mask:radial-gradient(farthest-side, transparent 84%, #000 85%);
     mask:radial-gradient(farthest-side, transparent 84%, #000 85%);
     animation:ringSpin 26s linear infinite reverse;
@@ -537,20 +537,20 @@
   @media(min-width:960px){ .cards.grid-4{ grid-template-columns:1fr 1fr 1fr 1fr; } }
   .card{
     background:#fff;
-    border:1px solid rgba(112,0,255,.22);
-    border-radius:24px;
-    padding:36px 28px;
+    border:1px solid rgba(14,110,255,.18);
+    border-radius:20px;
+    padding:26px 22px;
     transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-    box-shadow:0 10px 30px -18px rgba(112,0,255,.25);
+    box-shadow:0 10px 30px -18px rgba(14,110,255,.18);
     animation:hoverLift 5s ease-in-out infinite;
   }
   .card:nth-child(2n){ animation-delay:.4s; }
   .card:nth-child(3n){ animation-delay:.8s; }
-  .card:hover{ transform:translateY(-8px); border-color:var(--purple); box-shadow:0 30px 60px -24px rgba(112,0,255,.35); }
+  .card:hover{ transform:translateY(-6px); border-color:var(--purple); box-shadow:0 24px 48px -24px rgba(14,110,255,.28); }
   .card .num{
-    font-size:44px; font-weight:900; color:var(--purple);
+    font-size:38px; font-weight:900; color:var(--purple);
     line-height:1; letter-spacing:.02em;
-    margin-bottom:22px;
+    margin-bottom:16px;
     display:block; width:auto; height:auto; border-radius:0;
     text-align:left;
   }
@@ -620,7 +620,7 @@
     padding:28px 24px 24px 66px;
     transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
   }
-  .sel li:hover{ transform:translateY(-4px); border-color:rgba(155,107,255,.5); box-shadow:0 18px 42px -24px rgba(155,107,255,.5); }
+  .sel li:hover{ transform:translateY(-4px); border-color:rgba(91,168,255,.4); box-shadow:0 18px 42px -24px rgba(91,168,255,.4); }
   .sel li::before{
     counter-increment:sel;
     content:counter(sel,decimal-leading-zero);
@@ -636,7 +636,7 @@
     margin-top:36px;
     padding:20px 24px;
     border-left:4px solid var(--purple-2);
-    background:rgba(155,107,255,.10);
+    background:rgba(91,168,255,.08);
     border-radius:0 14px 14px 0;
     font-size:15px;
   }
@@ -680,7 +680,7 @@
   .field input:focus, .field select:focus, .field textarea:focus{
     outline:none;
     border-color:var(--purple);
-    box-shadow:0 0 0 4px rgba(112,0,255,.12);
+    box-shadow:0 0 0 4px rgba(14,110,255,.12);
     background:#fff;
   }
   .field textarea{ resize:vertical; min-height:90px; }
@@ -695,7 +695,7 @@
     transition:border-color .15s ease, background .15s ease;
   }
   .radio-group label:hover{ border-color:var(--purple-2); }
-  .radio-group label:has(input:checked){ border-color:var(--purple); background:rgba(112,0,255,.05); }
+  .radio-group label:has(input:checked){ border-color:var(--purple); background:rgba(14,110,255,.05); }
   .radio-group input{ accent-color:var(--purple); }
   .checkbox-line{
     display:flex; gap:12px; align-items:flex-start;
@@ -768,7 +768,7 @@
   /* ============ FINAL CTA ============ */
   .final{
     background:
-      radial-gradient(700px 320px at 50% 0%, rgba(112,0,255,.38) 0%, transparent 60%),
+      radial-gradient(700px 320px at 50% 0%, rgba(14,110,255,.32) 0%, transparent 60%),
       var(--bg-deep);
     padding:120px 0;
     text-align:center;
@@ -841,6 +841,91 @@
 
   /* emphasize live stats */
   .stat-pop .counter{ color:var(--gold); }
+
+  /* ============ FORM STEPS & PROGRESS ============ */
+  .form-progress{ margin-bottom:28px; text-align:center; }
+  .form-progress-label{ font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--purple); margin-bottom:10px; }
+  .form-progress-bar{ height:6px; border-radius:3px; background:#E4E7EF; overflow:hidden; }
+  .form-progress-fill{ height:100%; border-radius:3px; background:var(--grad); transition:width .4s cubic-bezier(.22,.9,.35,1); }
+  .form-step{ display:none; }
+  .form-step.active{ display:block; }
+  .form-nav{ display:flex; justify-content:space-between; gap:12px; margin-top:24px; }
+  .btn--outline{
+    display:inline-flex; align-items:center; gap:8px;
+    background:transparent; border:2px solid #E4E7EF; border-radius:10px;
+    padding:16px 32px; font-weight:700; font-size:13px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink); cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .btn--outline:hover{ border-color:var(--purple); color:var(--purple); }
+
+  /* ============ CHECKBOX GRID (MULTI-SELECT) ============ */
+  .checkbox-grid{ display:grid; grid-template-columns:1fr; gap:10px; margin-top:4px; }
+  .checkbox-grid label{
+    display:flex; align-items:center; gap:10px;
+    border:1.5px solid #E4E7EF; border-radius:12px;
+    padding:12px 14px; font-weight:600; font-size:14px;
+    cursor:pointer; transition:border-color .15s ease, background .15s ease;
+  }
+  .checkbox-grid label:hover{ border-color:var(--purple-2); }
+  .checkbox-grid label:has(input:checked){ border-color:var(--purple); background:rgba(14,110,255,.05); }
+  .checkbox-grid input{ accent-color:var(--purple); width:18px; height:18px; flex-shrink:0; }
+  @media(min-width:641px){ .checkbox-grid{ grid-template-columns:1fr 1fr; } }
+
+  /* ============ CALLOUT BOXES ============ */
+  .callout{
+    background:rgba(14,110,255,.06);
+    border-left:4px solid var(--purple);
+    border-radius:0 14px 14px 0;
+    padding:22px 24px;
+    margin-top:32px;
+    text-align:left;
+    color:var(--ink);
+    width:100%;
+    max-width:860px;
+  }
+  .callout h3{ font-size:16px; font-weight:800; margin-bottom:6px; }
+  .callout p{ color:#4b5563; font-size:14px; }
+  .callout--amber{ background:rgba(255,180,0,.06); border-left-color:var(--gold); }
+  .callout--amber p{ color:#6b5900; }
+
+  /* ============ STEP INFO BOX ============ */
+  .step-info{
+    background:rgba(255,180,0,.06);
+    border:1px solid rgba(255,180,0,.2);
+    border-radius:12px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    font-size:14px;
+    color:#4b5563;
+    text-align:left;
+  }
+  .step-info strong{ color:var(--ink); }
+
+  /* ============ STICKY MOBILE CTA ============ */
+  .sticky-cta{
+    display:none;
+    position:fixed; bottom:0; left:0; right:0; z-index:200;
+    background:var(--yellow); color:var(--ink);
+    font-weight:900; font-size:14px; letter-spacing:.08em; text-transform:uppercase;
+    text-align:center; padding:14px 20px;
+    box-shadow:0 -4px 20px rgba(0,0,0,.2);
+    text-decoration:none;
+    transition:transform .2s ease;
+  }
+  .sticky-cta:active{ transform:scale(.98); }
+
+  /* ============ MOBILE BREAKPOINTS (additions) ============ */
+  @media(max-width:640px){
+    .nav-inner{ height:56px; }
+    .logo{ font-size:18px; }
+    .mobile-menu .btn--apply{ margin:14px 0 4px; background:var(--yellow); color:var(--ink); justify-content:center; width:100%; text-align:center; padding:15px 28px; }
+    .checkbox-grid{ grid-template-columns:1fr; }
+    .form-nav{ flex-direction:column-reverse; }
+    .form-nav .btn--outline{ justify-content:center; width:100%; }
+    .form-nav .form-submit-wrap{ width:100%; }
+    .form-nav .form-submit-wrap .btn{ width:100%; justify-content:center; }
+  }
 </style>
 </head>
 
@@ -877,6 +962,7 @@
     <a href="#earn">How you earn</a>
     <a href="#selection">Selection</a>
     <a href="#faq">FAQ</a>
+    <a href="#apply" class="btn btn--sm btn--apply">APPLY NOW <span class="arrow">→</span></a>
   </div>
 
   <main id="top">
@@ -886,15 +972,12 @@
       <div class="ring" aria-hidden="true"></div>
       <div class="container hero-anim">
         <p class="label">WAZAMBI GPS AGENT PROGRAM · TWO DAYS · IN PERSON</p>
-        <h1>YOUR CONNECTIONS COULD BECOME YOUR <span class="accent">NEXT INCOME STREAM</span>.</h1>
+        <h1>WHAT IF YOUR PHONE AND CONNECTIONS COULD HELP YOU EARN UP TO <span class="accent">K7,200 A&nbsp;MONTH</span>?</h1>
         <p class="lead hero-sub">
-          You may already know individuals and businesses that own cars, trucks, buses, vans or trailers.
-          The Wazambi GPS Agent Program will teach you how to find those customers, explain our GPS services,
-          close sales and earn commission from successful installations.
+          Wazambi GPS is selecting only 100 independent sales agents across Zambia.
         </p>
 
-        <!-- 🎬 YOUR WEBSITE VIDEO GOES HERE (below the main headline).
-             Drop the file at: media/wazambi-promo.mp4  OR change the src below. -->
+        <!-- 🎬 COMPANY PROMO VIDEO (below the main headline) -->
         <div class="hero-video">
           <video controls preload="none" poster="https://images.unsplash.com/photo-1508873699372-7ae69f9a6b7f?auto=format&fit=crop&w=1400&q=80">
             <source src="/api/promo" type="video/mp4">
@@ -902,7 +985,7 @@
           </video>
         </div>
 
-        <a href="#apply" class="btn">SEE IF YOU'RE A FIT <span class="arrow">→</span></a>
+        <a href="#apply" class="btn">SEE IF YOU QUALIFY <span class="arrow">→</span></a>
 
         <p class="scarcity">Only <span class="stat-pop"><span class="counter" data-count="100">0</span> agents</span> will be selected from across Zambia.</p>
 
@@ -986,14 +1069,11 @@
         <p class="label label--blue">THE OPPORTUNITY</p>
         <h2 style="color:var(--ink);">MOST PEOPLE HAVE CONNECTIONS. <span style="color:var(--yellow);">VERY FEW TURN THOSE CONNECTIONS INTO INCOME.</span></h2>
         <p class="lead" style="max-width:760px; margin-left:auto; margin-right:auto;">
-          Every day, vehicle owners lose money through theft, fuel misuse, unauthorised trips and poor fleet control.
-          Wazambi GPS provides solutions to these problems.
+          Vehicle owners lose money through theft, fuel misuse and unauthorised trips.
+          Wazambi GPS helps them protect and control their vehicles.
+          You find the customer. We install the GPS. You earn commission.
         </p>
-        <p class="lead" style="max-width:760px; margin-left:auto; margin-right:auto;">
-          As an agent, your job is to find people and businesses that need our services. You introduce the customer,
-          Wazambi handles the installation, and you earn commission after the sale is verified.
-        </p>
-        <a href="#apply" class="btn" style="margin-top:34px;">APPLY FOR ONE OF THE 100 POSITIONS <span class="arrow">→</span></a>
+        <a href="#apply" class="btn" style="margin-top:34px;">APPLY FOR ONE OF 100 AGENT PLACES <span class="arrow">→</span></a>
       </div>
     </section>
 
@@ -1007,22 +1087,22 @@
           <div class="card">
             <div class="num">01</div>
             <h3>DOOR-TO-DOOR</h3>
-            <p>Visit transport companies, bus operators, delivery businesses, schools, mines and other organisations that operate vehicles.</p>
+            <p>Visit transport companies, bus operators and other organisations that operate vehicles.</p>
           </div>
           <div class="card">
             <div class="num">02</div>
             <h3>FACEBOOK AND WHATSAPP</h3>
-            <p>Use social media, Facebook groups, Marketplace, WhatsApp Status and direct messages to find interested customers.</p>
+            <p>Reach customers through Facebook, WhatsApp Status and direct messages.</p>
           </div>
           <div class="card">
             <div class="num">03</div>
             <h3>COLD CALLING</h3>
-            <p>Contact businesses that operate vehicles, introduce Wazambi GPS and arrange a proper follow-up conversation.</p>
+            <p>Call vehicle-operating businesses and arrange follow-up conversations.</p>
           </div>
           <div class="card">
             <div class="num">04</div>
             <h3>REFERRALS AND CONNECTIONS</h3>
-            <p>Speak to vehicle owners, friends, relatives and business contacts who can introduce you to potential customers.</p>
+            <p>Vehicle owners, friends and business contacts who can introduce you to customers.</p>
           </div>
         </div>
       </div>
@@ -1169,15 +1249,19 @@
     <section class="section section--white" id="why">
       <div class="container">
         <p class="label label--blue">Why Wazambi</p>
-        <h2 style="color:var(--ink);">REPRESENT A COMPANY SOLVING REAL VEHICLE PROBLEMS</h2>
+        <h2 style="color:var(--ink);">REPRESENT A REAL ZAMBIAN GPS COMPANY</h2>
         <p class="lead" style="max-width:760px;">
           Wazambi GPS helps individuals and businesses monitor, protect and control their vehicles.
-          Our solutions include live GPS tracking, route history, geofences, driver monitoring, remote immobilisation,
-          fuel monitoring, AI dashcams and fleet reports.
+          Selected agents represent Wazambi professionally and connect customers with solutions that protect vehicles and reduce business losses.
         </p>
-        <p class="lead" style="max-width:760px;">
-          Selected agents will represent Wazambi professionally and connect customers with solutions that can protect vehicles and reduce business losses.
-        </p>
+
+        <!-- 🎬 COMPANY PROMO VIDEO -->
+        <div class="hero-video" style="max-width:780px; margin:40px auto 8px;">
+          <video controls preload="none" poster="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1400&q=80">
+            <source src="/api/promo" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
 
         <!-- 📷 REAL PICTURES OF WAZAMBI -->
         <div class="photo-grid grid-5">
@@ -1248,142 +1332,204 @@
     <section class="section section--white" id="apply">
       <div class="container center">
         <p class="label label--blue">Application</p>
-        <h2 style="color:var(--ink);">SEE IF YOU'RE A FIT</h2>
+        <h2 style="color:var(--ink);">SEE IF YOU QUALIFY</h2>
         <p class="lead" style="max-width:640px; margin-left:auto; margin-right:auto;">
           Complete the application honestly. Your answers will help us select the 100 people most likely to succeed.
         </p>
 
+        <div class="callout">
+          <h3>WE ARE NOT ACCEPTING EVERYONE.</h3>
+          <p>Only the strongest 100 applicants will receive the Agent Partner Agreement and an invitation to training. Applying does not guarantee selection, so only apply if you are serious about finding customers and attending training.</p>
+        </div>
+
+        <div class="callout callout--amber">
+          <h3>TWO-DAY TRAINING · 1–2 OCTOBER 2026</h3>
+          <p>You must attend both days and arrange your own transport to the venue. The venue will be confirmed to shortlisted applicants.</p>
+        </div>
+
         <form class="form-box" id="applyForm" action="submit.php" method="POST" enctype="multipart/form-data">
-          <div class="form-grid">
-
-            <div class="field">
-              <label for="q9_fullname">1. Full name <span class="req">*</span></label>
-              <input type="text" id="q9_fullname" name="fullname" required>
-            </div>
-
-            <div class="field">
-              <label for="q10_whatsapp">2. WhatsApp number <span class="req">*</span></label>
-              <input type="tel" id="q10_whatsapp" name="whatsapp" required>
-            </div>
-
-            <div class="field">
-              <label for="q11_email">3. Email address <span class="req">*</span></label>
-              <input type="email" id="q11_email" name="email" required>
-            </div>
-
-            <div class="field">
-              <label for="q12_town">4. Town and province <span class="req">*</span></label>
-              <input type="text" id="q12_town" name="town" required>
-            </div>
-
-            <div class="field">
-              <label>5. Are you 18 years or older? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="age_18" value="Yes" required> Yes</label>
-                <label><input type="radio" name="age_18" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>6. Do you own a smartphone with internet access? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="smartphone" value="Yes" required> Yes</label>
-                <label><input type="radio" name="smartphone" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>7. Do you have sales or marketing experience? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="sales_experience" value="Yes" required> Yes</label>
-                <label><input type="radio" name="sales_experience" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="q13_detail">8. Briefly explain your experience. <span class="req">*</span></label>
-              <textarea id="q13_detail" name="experience_detail" required rows="3"></textarea>
-            </div>
-
-            <div class="field full">
-              <label for="q14_methods">9. Which sales methods will you use? <span class="req">*</span></label>
-              <select id="q14_methods" name="sales_methods" required>
-                <option value="" disabled selected>Select a method</option>
-                <option>Door-to-door</option>
-                <option>Facebook and WhatsApp</option>
-                <option>Cold calling</option>
-                <option>Referrals and connections</option>
-                <option>A combination of the above</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label>10. Do you know individuals or businesses that own vehicles? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="knows_vehicles" value="Yes" required> Yes</label>
-                <label><input type="radio" name="knows_vehicles" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="q15_weekly">11. How many potential customers can you approach weekly? <span class="req">*</span></label>
-              <input type="number" id="q15_weekly" name="weekly_customers" min="0" required>
-            </div>
-
-            <div class="field full">
-              <label for="q16_first5">12. Explain how you will find your first five customers. <span class="req">*</span></label>
-              <textarea id="q16_first5" name="first_five" required rows="3"></textarea>
-            </div>
-
-            <div class="field full">
-              <label for="q17_why">13. Why should Wazambi select you? <span class="req">*</span></label>
-              <textarea id="q17_why" name="why_you" required rows="3"></textarea>
-            </div>
-
-            <div class="field">
-              <label>14. Can you attend both training days? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="attend_both" value="Yes" required> Yes</label>
-                <label><input type="radio" name="attend_both" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>15. Can you travel to the venue at your own cost? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="travel_own_cost" value="Yes" required> Yes</label>
-                <label><input type="radio" name="travel_own_cost" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field">
-              <label>16. Do you understand that this is commission-based and not salaried employment? <span class="req">*</span></label>
-              <div class="radio-group">
-                <label><input type="radio" name="understands_commission" value="Yes" required> Yes</label>
-                <label><input type="radio" name="understands_commission" value="No"> No</label>
-              </div>
-            </div>
-
-            <div class="field full">
-              <label for="q17_cv">17. Upload CV in PDF format. <span class="req">*</span></label>
-              <div class="file-drop">
-                Click to choose your CV (PDF only)
-                <input type="file" id="q17_cv" name="cv" accept=".pdf,application/pdf" required>
-              </div>
-            </div>
-
-            <div class="field full">
-              <label class="checkbox-line">
-                                <input type="checkbox" id="q18_declare" name="agree_declaration" value="Yes" required>
-                <span><b>18. Accept the application declaration.</b> I confirm that the information I provide is true, that I understand this is a commission-based agent opportunity, and that I can attend both training days on 1–2 October 2026. <span class="req">*</span></span>
-              </label>
-              <p class="form-error" id="formError">Please complete all required fields before submitting.</p>
-            </div>
-
+          <div class="form-progress">
+            <div class="form-progress-label" id="stepLabel">STEP 1 OF 4 — 25% COMPLETE</div>
+            <div class="form-progress-bar"><div class="form-progress-fill" id="stepFill" style="width:25%"></div></div>
           </div>
 
-          <div class="form-submit">
-            <button type="submit" class="btn btn--block">SUBMIT MY APPLICATION <span class="arrow">→</span></button>
+          <!-- STEP 1 · YOUR DETAILS -->
+          <div class="form-step active" data-step="1">
+            <div class="form-grid">
+
+              <div class="field">
+                <label for="q1_fullname">Full name <span class="req">*</span></label>
+                <input type="text" id="q1_fullname" name="fullname" required>
+              </div>
+
+              <div class="field">
+                <label for="q2_whatsapp">WhatsApp number <span class="req">*</span></label>
+                <input type="tel" id="q2_whatsapp" name="whatsapp" required>
+              </div>
+
+              <div class="field">
+                <label for="q3_email">Email address <span class="req">*</span></label>
+                <input type="email" id="q3_email" name="email" required>
+              </div>
+
+              <div class="field">
+                <label for="q4_town">Town and province <span class="req">*</span></label>
+                <input type="text" id="q4_town" name="town" required>
+              </div>
+
+              <div class="field">
+                <label>Are you 18 years or older? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="age_18" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="age_18" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Do you own a smartphone with internet access? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="smartphone" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="smartphone" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label for="q5_cv">Upload CV in PDF format <span class="req">*</span></label>
+                <div class="file-drop">
+                  Click to choose your CV (PDF only)
+                  <input type="file" id="q5_cv" name="cv" accept=".pdf,application/pdf" required>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-nav">
+              <span></span>
+              <button type="button" class="btn" data-next>CONTINUE <span class="arrow">→</span></button>
+            </div>
+          </div>
+
+          <!-- STEP 2 · SALES EXPERIENCE -->
+          <div class="form-step" data-step="2">
+            <div class="form-grid">
+
+              <div class="field">
+                <label>Do you have sales or marketing experience? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="sales_experience" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="sales_experience" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Do you know individuals or businesses that own vehicles? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="knows_vehicles" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="knows_vehicles" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label for="q6_detail">Briefly explain your experience <span class="req">*</span></label>
+                <textarea id="q6_detail" name="experience_detail" required rows="3"></textarea>
+              </div>
+
+              <div class="field full">
+                <label>Which sales methods will you use? Select all that apply. <span class="req">*</span></label>
+                <div class="checkbox-grid">
+                  <label><input type="checkbox" name="sales_methods" value="Door-to-door" required> Door-to-door</label>
+                  <label><input type="checkbox" name="sales_methods" value="Facebook marketing"> Facebook marketing</label>
+                  <label><input type="checkbox" name="sales_methods" value="WhatsApp marketing"> WhatsApp marketing</label>
+                  <label><input type="checkbox" name="sales_methods" value="Cold calling"> Cold calling</label>
+                  <label><input type="checkbox" name="sales_methods" value="Business visits"> Business visits</label>
+                  <label><input type="checkbox" name="sales_methods" value="Referrals"> Referrals</label>
+                  <label><input type="checkbox" name="sales_methods" value="Personal connections"> Personal connections</label>
+                </div>
+              </div>
+
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn--outline" data-back><span class="arrow">←</span> Back</button>
+              <button type="button" class="btn" data-next>CONTINUE <span class="arrow">→</span></button>
+            </div>
+          </div>
+
+          <!-- STEP 3 · YOUR CUSTOMER PLAN -->
+          <div class="form-step" data-step="3">
+            <div class="form-grid">
+
+              <div class="field full">
+                <label>How many potential customers can you approach weekly? <span class="req">*</span></label>
+                <div class="radio-group" id="weeklyGrid">
+                  <label><input type="radio" name="weekly_customers" value="5" required> Fewer than 10</label>
+                  <label><input type="radio" name="weekly_customers" value="15"> 10–20</label>
+                  <label><input type="radio" name="weekly_customers" value="30"> 21–40</label>
+                  <label><input type="radio" name="weekly_customers" value="50"> More than 40</label>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label for="q7_first5">Explain how you will find your first five customers <span class="req">*</span></label>
+                <textarea id="q7_first5" name="first_five" required rows="3"></textarea>
+              </div>
+
+              <div class="field full">
+                <label for="q8_why">Why should Wazambi select you? <span class="req">*</span></label>
+                <textarea id="q8_why" name="why_you" required rows="3"></textarea>
+              </div>
+
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn--outline" data-back><span class="arrow">←</span> Back</button>
+              <button type="button" class="btn" data-next>CONTINUE <span class="arrow">→</span></button>
+            </div>
+          </div>
+
+          <!-- STEP 4 · TRAINING AND AGREEMENT -->
+          <div class="form-step" data-step="4">
+            <div class="step-info">
+              <strong>Training:</strong> 1–2 October 2026. You must attend both days and arrange your own transport to the venue. Venue: to be confirmed.
+            </div>
+            <div class="form-grid">
+
+              <div class="field">
+                <label>Can you attend both training days? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="attend_both" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="attend_both" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Can you travel to the venue at your own cost? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="travel_own_cost" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="travel_own_cost" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Do you understand that this is commission-based and not salaried employment? <span class="req">*</span></label>
+                <div class="radio-group">
+                  <label><input type="radio" name="understands_commission" value="Yes" required> Yes</label>
+                  <label><input type="radio" name="understands_commission" value="No"> No</label>
+                </div>
+              </div>
+
+              <div class="field full">
+                <label class="checkbox-line">
+                  <input type="checkbox" id="q9_declare" name="agree_declaration" value="Yes" required>
+                  <span><b>Accept the application declaration.</b> I confirm that the information I provide is true, that I understand this is a commission-based agent opportunity, and that I can attend both training days on 1–2 October 2026. <span class="req">*</span></span>
+                </label>
+                <p class="form-error" id="formError">Please complete all required fields before submitting.</p>
+              </div>
+
+            </div>
+            <div class="form-nav">
+              <button type="button" class="btn--outline" data-back><span class="arrow">←</span> Back</button>
+              <div class="form-submit-wrap">
+                <button type="submit" class="btn btn--block">SUBMIT MY APPLICATION <span class="arrow">→</span></button>
+              </div>
+            </div>
           </div>
         </form>
 
@@ -1391,7 +1537,7 @@
         <div class="success" id="applySuccess">
           <div class="ok">✓</div>
           <h2>APPLICATION RECEIVED</h2>
-          <p>Thank you for applying. Our team will review your answers. Only shortlisted applicants will be contacted and sent the Agent Partner Agreement.</p>
+          <p>Your application will now be reviewed. Applying does not guarantee selection. Only shortlisted applicants will be contacted with the next steps.</p>
         </div>
 
       </div>
@@ -1439,7 +1585,7 @@
     <!-- ============ FINAL CTA ============ -->
     <section class="final">
       <div class="container">
-        <h2><span class="accent"><span class="counter stat-pop" data-count="100">0</span> AGENT POSITIONS.</span> ONE OPPORTUNITY TO BUILD A <span class="accent">NEW INCOME STREAM</span>.</h2>
+        <h2><span class="accent"><span class="counter stat-pop" data-count="100">0</span> AGENT PLACES.</span> ONE OPPORTUNITY TO BUILD A <span class="accent">NEW INCOME STREAM</span>.</h2>
         <p class="close">Applications close on 20 September 2026.</p>
 
         <div class="countdown countdown--light" data-deadline="2026-09-20T23:59:59+02:00" aria-label="Countdown to application deadline">
@@ -1452,7 +1598,7 @@
           <span class="cd-block"><b data-cd="s">0</b><i>Sec</i></span>
         </div>
 
-        <a href="#apply" class="btn" style="margin-top:36px;">SEE IF YOU'RE A FIT <span class="arrow">→</span></a>
+        <a href="#apply" class="btn" style="margin-top:36px;">SEE IF YOU QUALIFY <span class="arrow">→</span></a>
         <p class="date">Two-day live training: 1–2 October 2026</p>
       </div>
     </section>
@@ -1471,6 +1617,8 @@
       </p>
     </div>
   </footer>
+
+  <a href="#apply" class="sticky-cta" id="stickyCta">SEE IF YOU QUALIFY <span class="arrow">→</span></a>
 
   <script>
     /* Mobile nav */
@@ -1505,16 +1653,71 @@
       });
     });
 
+    /* ── Form steps (4-step wizard) ────────────────────────────── */
+    const formSteps = document.querySelectorAll('.form-step');
+    const stepLabel = document.getElementById('stepLabel');
+    const stepFill = document.getElementById('stepFill');
+    const TOTAL_STEPS = formSteps.length || 4;
+    let currentStep = 0;
+
+    function activeStep() {
+      return formSteps[currentStep] || formSteps[0];
+    }
+    function stepIsValid(step) {
+      const controls = step.querySelectorAll('input, select, textarea');
+      for (const c of controls) {
+        if (c.disabled) continue;
+        if (!c.checkValidity()) {
+          c.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+    function updateStepProgress() {
+      const pct = Math.round(((currentStep + 1) / TOTAL_STEPS) * 100);
+      if (stepFill) stepFill.style.width = pct + '%';
+      if (stepLabel) stepLabel.textContent = 'STEP ' + (currentStep + 1) + ' OF ' + TOTAL_STEPS + ' — ' + pct + '% COMPLETE';
+      formSteps.forEach((s, i) => s.classList.toggle('active', i === currentStep));
+    }
+    function scrollToApply() {
+      const applySection = document.getElementById('apply');
+      if (applySection) applySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    formSteps.forEach((step, i) => {
+      const nextBtn = step.querySelector('[data-next]');
+      const backBtn = step.querySelector('[data-back]');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          formError.style.display = 'none';
+          if (!stepIsValid(step)) return;
+          currentStep = Math.min(TOTAL_STEPS - 1, i + 1);
+          updateStepProgress();
+          scrollToApply();
+        });
+      }
+      if (backBtn) {
+        backBtn.addEventListener('click', () => {
+          formError.style.display = 'none';
+          currentStep = Math.max(0, i - 1);
+          updateStepProgress();
+          scrollToApply();
+        });
+      }
+    });
+    updateStepProgress();
+
     /* ── Form submit → submit.php ──────────────────────────────── */
     const form = document.getElementById('applyForm');
-    const error = document.getElementById('formError');
+    const formError = document.getElementById('formError');
     const success = document.getElementById('applySuccess');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      error.style.display = 'none';
-      if (!form.checkValidity()) {
-        error.style.display = 'block';
-        form.reportValidity();
+      formError.style.display = 'none';
+      if (!stepIsValid(activeStep())) {
+        formError.textContent = 'Please complete all required fields before submitting.';
+        formError.style.display = 'block';
+        formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
       const submitBtn = form.querySelector('button[type="submit"]');
@@ -1526,9 +1729,9 @@
         const res = await fetch(form.action, { method: 'POST', body: new FormData(form) });
         const json = await res.json().catch(() => ({}));
         if (!json.ok) {
-          error.textContent = (json.errors && json.errors[0]) ? json.errors[0] : 'Submission failed. Please try again.';
-          error.style.display = 'block';
-          error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          formError.textContent = (json.errors && json.errors[0]) ? json.errors[0] : 'Submission failed. Please try again.';
+          formError.style.display = 'block';
+          formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
           submitBtn.disabled = false;
           submitBtn.innerHTML = original;
           return;
@@ -1537,9 +1740,9 @@
         success.style.display = 'block';
         success.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } catch (err) {
-        error.textContent = 'Network error. Please check your connection and try again.';
-        error.style.display = 'block';
-        error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        formError.textContent = 'Network error. Please check your connection and try again.';
+        formError.style.display = 'block';
+        formError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         submitBtn.disabled = false;
         submitBtn.innerHTML = original;
       }
@@ -1560,7 +1763,7 @@
           <circle cx="220" cy="180" r="120" fill="#e0e7ff"/>
           <circle cx="980" cy="600" r="180" fill="#fef3c7"/>
           <rect x="180" y="190" width="840" height="420" rx="36" fill="rgba(255,255,255,0.7)" stroke="#c7d2fe" stroke-width="4"/>
-          <path d="M470 360 L560 450 L700 280" fill="none" stroke="#7c3aed" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M470 360 L560 450 L700 280" fill="none" stroke="#0E6EFF" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
           <rect x="250" y="520" width="700" height="48" rx="24" fill="#e5e7eb"/>
           <text x="600" y="550" text-anchor="middle" font-size="42" font-family="Arial, sans-serif" fill="#374151" font-weight="700">${label}</text>
         </svg>
