@@ -119,6 +119,37 @@
     50% { box-shadow:0 0 0 12px rgba(246,210,52,0); }
   }
 
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(26px); }
+    to{ opacity:1; transform:none; }
+  }
+
+  @keyframes fadeIn{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
+
+  @keyframes gradFlow{
+    0%{ background-position:0% center; }
+    100%{ background-position:200% center; }
+  }
+
+  @keyframes ringSpin{
+    to{ transform:translate(-50%,-50%) rotate(360deg); }
+  }
+
+  @keyframes popIn{
+    0%{ opacity:0; transform:scale(.7); }
+    70%{ transform:scale(1.08); }
+    100%{ opacity:1; transform:scale(1); }
+  }
+
+  @keyframes tickPulse{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.12); }
+    100%{ transform:scale(1); }
+  }
+
   .container{
     width:100%;
     max-width:1120px;
@@ -339,6 +370,51 @@
   .hero .label{ margin-top:8px; }
   .hero h1{ max-width:1020px; }
   .hero h1 .accent{ color:var(--yellow); }
+  .hero h1 .accent{
+    background:linear-gradient(90deg, #f6d234 0%, #fff6c9 25%, #ffb400 50%, #f6d234 75%, #fff6c9 100%);
+    background-size:200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    -webkit-text-fill-color:transparent;
+    animation:gradFlow 5s linear infinite;
+  }
+  .hero .ring{
+    position:absolute;
+    left:50%; top:50%;
+    width:min(760px,92vw);
+    aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(246,210,52,.28) 0deg, rgba(155,107,255,0) 60deg, rgba(155,107,255,.28) 180deg, rgba(246,210,52,0) 300deg, rgba(246,210,52,.28) 360deg);
+    -webkit-mask:radial-gradient(farthest-side, transparent 62%, #000 63%);
+    mask:radial-gradient(farthest-side, transparent 62%, #000 63%);
+    opacity:.55;
+    z-index:0;
+    pointer-events:none;
+    animation:ringSpin 16s linear infinite;
+  }
+  .hero .ring::after{
+    content:"";
+    position:absolute; inset:0; border-radius:50%;
+    background:conic-gradient(from 90deg, rgba(246,210,52,.1) 0deg, rgba(246,210,52,0) 120deg, rgba(246,210,52,.1) 240deg, rgba(246,210,52,0) 360deg);
+    -webkit-mask:radial-gradient(farthest-side, transparent 84%, #000 85%);
+    mask:radial-gradient(farthest-side, transparent 84%, #000 85%);
+    animation:ringSpin 26s linear infinite reverse;
+  }
+  .hero-anim > *{
+    opacity:0;
+    animation:fadeUp .8s cubic-bezier(.22,.9,.35,1) forwards;
+    will-change:opacity,transform;
+  }
+  .hero-anim > *:nth-child(1){ animation-delay:.05s; }
+  .hero-anim > *:nth-child(2){ animation-delay:.18s; }
+  .hero-anim > *:nth-child(3){ animation-delay:.31s; }
+  .hero-anim > *:nth-child(4){ animation-delay:.46s; }
+  .hero-anim > *:nth-child(5){ animation-delay:.6s; }
+  .hero-anim > *:nth-child(6){ animation-delay:.73s; }
+  .hero-anim > *:nth-child(7){ animation-delay:.85s; }
+  .hero-anim > *:nth-child(8){ animation-delay:.95s; }
   .hero p.hero-sub{ max-width:720px; }
   .hero-video{
     width:100%;
@@ -352,9 +428,51 @@
     aspect-ratio:16/9;
   }
   .hero-video video{ width:100%; height:100%; object-fit:cover; }
+  .hero .ring{ z-index:1; }
+  .hero .container{ z-index:2; }
   .hero .btn{ margin-top:40px; }
   .scarcity{ margin-top:24px; font-weight:800; font-size:16px; color:#fff; }
   .scarcity span{ color:var(--yellow); }
+
+  /* ============ COUNTDOWN & COUNT-UPS ============ */
+  .countdown{
+    display:flex; align-items:center; justify-content:center;
+    flex-wrap:wrap; gap:10px 14px;
+    margin-top:30px;
+  }
+  .countdown .cd-block{
+    display:flex; flex-direction:column; align-items:center;
+    min-width:64px;
+    padding:12px 10px 10px;
+    border-radius:14px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--line);
+    backdrop-filter:blur(4px);
+  }
+  .countdown .cd-block b{
+    font-size:30px; font-weight:900; line-height:1;
+    color:var(--yellow);
+    font-variant-numeric:tabular-nums;
+    display:inline-block;
+  }
+  .countdown .cd-block b.tick{ animation:tickPulse .3s ease; }
+  .countdown .cd-block i{
+    margin-top:6px;
+    font-style:normal;
+    font-size:9.5px;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--gray-2);
+  }
+  .countdown .cd-sep{
+    font-size:26px; font-weight:900; color:var(--purple-2);
+    transform:translateY(-6px);
+  }
+  .countdown--light .cd-block{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.12); }
+  .countdown--light .cd-block i{ color:var(--gray); }
+  .counter{ font-variant-numeric:tabular-nums; display:inline-block; }
+  .counter-soft{ color:var(--purple-2); }
   .disclaimer{
     margin-top:14px;
     font-size:12.5px;
@@ -616,6 +734,7 @@
     display:flex; align-items:center; justify-content:center;
     color:var(--ink);
     font-size:28px; font-weight:900;
+    animation:popIn .55s cubic-bezier(.22,.9,.35,1) both;
   }
   .success h2{ font-size:clamp(24px,4vw,32px); color:var(--ink); margin-bottom:10px; }
   .success p{ color:#4b5563; max-width:560px; margin:0 auto; }
@@ -715,6 +834,13 @@
   .reveal-delay-1{ transition-delay:80ms; }
   .reveal-delay-2{ transition-delay:160ms; }
   .reveal-delay-3{ transition-delay:240ms; }
+
+  /* ============ 3D TILT ============ */
+  .tilt{ transform-style:preserve-3d; perspective:900px; transition:transform .18s ease-out, box-shadow .18s ease-out; will-change:transform; }
+  .tilt .tilt-inner{ transform:translateZ(22px); }
+
+  /* emphasize live stats */
+  .stat-pop .counter{ color:var(--gold); }
 </style>
 </head>
 
@@ -757,7 +883,8 @@
 
     <!-- ============ SECTION 2 · HERO ============ -->
     <section class="hero">
-      <div class="container">
+      <div class="ring" aria-hidden="true"></div>
+      <div class="container hero-anim">
         <p class="label">WAZAMBI GPS AGENT PROGRAM · TWO DAYS · IN PERSON</p>
         <h1>YOUR CONNECTIONS COULD BECOME YOUR <span class="accent">NEXT INCOME STREAM</span>.</h1>
         <p class="lead hero-sub">
@@ -777,7 +904,17 @@
 
         <a href="#apply" class="btn">SEE IF YOU'RE A FIT <span class="arrow">→</span></a>
 
-        <p class="scarcity">Only <span>100 agents</span> will be selected from across Zambia.</p>
+        <p class="scarcity">Only <span class="stat-pop"><span class="counter" data-count="100">0</span> agents</span> will be selected from across Zambia.</p>
+
+        <div class="countdown countdown--light" data-deadline="2026-09-20T23:59:59+02:00" aria-label="Countdown to application deadline">
+          <span class="cd-block"><b data-cd="d">0</b><i>Days</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="h">0</b><i>Hrs</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="m">0</b><i>Min</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="s">0</b><i>Sec</i></span>
+        </div>
         <p class="disclaimer">
           This is an independent, commission-based opportunity—not salaried employment. Earnings depend on verified sales and are not guaranteed.
         </p>
@@ -917,7 +1054,7 @@
         </div>
 
         <div class="highlight">
-          <h3>EARN UP TO K7,200</h3>
+          <h3>EARN UP TO K<span class="counter" data-count="7200">0</span></h3>
           <p>Reach 30 verified vehicle installations to unlock your commission for withdrawal. Your recorded commission remains saved while you work toward the target.</p>
         </div>
 
@@ -1302,9 +1439,20 @@
     <!-- ============ FINAL CTA ============ -->
     <section class="final">
       <div class="container">
-        <h2>100 AGENT POSITIONS. ONE OPPORTUNITY TO BUILD A <span class="accent">NEW INCOME STREAM</span>.</h2>
+        <h2><span class="accent"><span class="counter stat-pop" data-count="100">0</span> AGENT POSITIONS.</span> ONE OPPORTUNITY TO BUILD A <span class="accent">NEW INCOME STREAM</span>.</h2>
         <p class="close">Applications close on 20 September 2026.</p>
-        <a href="#apply" class="btn">SEE IF YOU'RE A FIT <span class="arrow">→</span></a>
+
+        <div class="countdown countdown--light" data-deadline="2026-09-20T23:59:59+02:00" aria-label="Countdown to application deadline">
+          <span class="cd-block"><b data-cd="d">0</b><i>Days</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="h">0</b><i>Hrs</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="m">0</b><i>Min</i></span>
+          <span class="cd-sep">:</span>
+          <span class="cd-block"><b data-cd="s">0</b><i>Sec</i></span>
+        </div>
+
+        <a href="#apply" class="btn" style="margin-top:36px;">SEE IF YOU'RE A FIT <span class="arrow">→</span></a>
         <p class="date">Two-day live training: 1–2 October 2026</p>
       </div>
     </section>
@@ -1439,7 +1587,7 @@
 
     /* ── Scroll reveal (lightweight) ─────────────────────────────────── */
     (function(){
-      const defaultTargets = document.querySelectorAll('.hero .container, .announce, .photo, .card, .step, .split-col, .sel li, .form-box, .faq-item, .highlight, .final .container');
+      const defaultTargets = document.querySelectorAll('.announce, .photo, .card, .step, .split-col, .sel li, .form-box, .faq-item, .highlight, .final .container');
       defaultTargets.forEach((el, idx) => {
         el.classList.add('to-reveal');
         el.style.transitionDelay = (idx * 70) + 'ms';
@@ -1467,6 +1615,100 @@
       } else {
         revealTargets.forEach(el => el.classList.add('revealed'));
       }
+    })();
+
+    /* ── Live countdown tabs ─────────────────────────────────────── */
+    (function(){
+      const DEADLINE = '2026-09-20T23:59:59+02:00';
+      const groups = document.querySelectorAll('.countdown');
+      const elCache = [];
+      groups.forEach(g => {
+        const d = g.querySelector('[data-cd="d"]');
+        const h = g.querySelector('[data-cd="h"]');
+        const m = g.querySelector('[data-cd="m"]');
+        const s = g.querySelector('[data-cd="s"]');
+        elCache.push({ d, h, m, s });
+      });
+      if (!elCache.length) return;
+      function pad(n){ return String(n).padStart(2,'0'); }
+      function tick(){
+        const now = Date.now();
+        const end = new Date(DEADLINE).getTime();
+        let diff = Math.max(0, end - now);
+        const dd = Math.floor(diff / 86400000);
+        const hh = Math.floor((diff % 86400000) / 3600000);
+        const mm = Math.floor((diff % 3600000) / 60000);
+        const ss = Math.floor((diff % 60000) / 1000);
+        elCache.forEach(group => {
+          const vals = [pad(dd), pad(hh), pad(mm), pad(ss)];
+          [[group.d,dd],[group.h,hh],[group.m,mm],[group.s,ss]].forEach(([el,val])=>{
+            if(!el) return;
+            const str = pad(val);
+            if (el.textContent !== str) {
+              el.textContent = str;
+              el.classList.remove('tick');
+              void el.offsetWidth;
+              el.classList.add('tick');
+            }
+          });
+          if(diff === 0 && group.d){ group.d.textContent = '00'; group.h.textContent = '00'; group.m.textContent = '00'; group.s.textContent = '00'; }
+        });
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    /* ── Animated count-up on scroll ─────────────────────────────── */
+    (function(){
+      const nums = document.querySelectorAll('[data-count]');
+      if (!nums.length) return;
+      const fmt = n => n.toLocaleString('en-US');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function run(el){
+        const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        if (reduce) { el.textContent = fmt(target); return; }
+        const dur = 1400;
+        const t0 = performance.now();
+        function frame(t){
+          const p = Math.min(1, (t - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = fmt(Math.round(target * eased));
+          if (p < 1) requestAnimationFrame(frame);
+          else el.textContent = fmt(target);
+        }
+        requestAnimationFrame(frame);
+      }
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            run(entry.target);
+            obs.unobserve(entry.target);
+          });
+        }, { threshold: 0.4 });
+        nums.forEach(el => io.observe(el));
+      } else {
+        nums.forEach(run);
+      }
+    })();
+
+    /* ── 3D tilt on photos ────────────────────────────────────────── */
+    (function(){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!window.matchMedia('(hover: hover)').matches) return;
+      const els = document.querySelectorAll('.photo');
+      els.forEach(el => {
+        el.classList.add('tilt');
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          el.style.transform = `perspective(900px) rotateX(${(-py*6).toFixed(2)}deg) rotateY(${(px*8).toFixed(2)}deg) translateY(-4px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = '';
+        });
+      });
     })();
   </script>
 
