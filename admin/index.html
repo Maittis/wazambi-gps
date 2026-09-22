@@ -224,13 +224,15 @@ async function renderDashboard(params){
 
   let tableHtml='';
   if(!rows.length){tableHtml='<div style="padding:48px;text-align:center;color:#8FA2BC;font-size:15px">No applications found.</div>';}
-  else{tableHtml=`<table><thead><tr><th>ID</th><th>Name</th><th>Email / WhatsApp</th><th>Town</th><th>Vehicles/wk</th><th>Status</th><th>Applied</th></tr></thead><tbody>${
+  else{tableHtml=`<table><thead><tr><th>ID</th><th>Name</th><th>Email / WhatsApp</th><th>Town</th><th>Vehicles/wk</th><th>Reach</th><th>Areas</th><th>Status</th><th>Applied</th></tr></thead><tbody>${
     rows.map(r=>`<tr>
       <td><a onclick="viewApp(${r.id})">${r.id}</a></td>
       <td><a onclick="viewApp(${r.id})">${r.fullname}</a></td>
       <td>${r.email}<br><span style="color:#8FA2BC;font-size:12.5px">${r.whatsapp}</span></td>
       <td>${r.town}</td>
       <td style="text-align:center">${r.weekly_customers}</td>
+      <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(r.reachable_businesses||'').replace(/"/g,'&quot;')}">${r.reachable_businesses||'—'}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${(r.areas_covered||'').replace(/"/g,'&quot;')}">${r.areas_covered||'—'}</td>
       <td>${badge(r.status)}</td>
       <td style="white-space:nowrap;color:#8FA2BC;font-size:13px">${rel(r.created_at)}</td>
     </tr>`).join('')

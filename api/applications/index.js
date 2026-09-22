@@ -48,7 +48,9 @@ module.exports = async function handler(req, res) {
   const totalPages = Math.max(1, Math.ceil(totalRows / perPage));
 
   const rows = await sqlUnsafe(
-    `SELECT id, fullname, whatsapp, email, town, status, weekly_customers, created_at
+    `SELECT id, fullname, whatsapp, email, town, status, weekly_customers,
+      reachable_businesses, areas_covered, first_seven_days,
+      complete_onboarding, approved_info_prices, info_accurate, created_at
      FROM applications ${whereSql}
      ORDER BY created_at DESC
      LIMIT ${perPage} OFFSET ${offset}`,
