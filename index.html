@@ -278,6 +278,12 @@
   .mobile-menu a:hover{ color:var(--yellow); }
   .mobile-menu .btn{ margin-top:16px; justify-content:center; }
 
+  @media(min-width:641px){
+    .nav-links{ display:flex; }
+    .hamburger{ display:none; }
+    .mobile-menu{ display:none !important; }
+  }
+
   /* ============ BUTTONS ============ */
   .btn{
     display:inline-flex;
