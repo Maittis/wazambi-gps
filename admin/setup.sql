@@ -33,6 +33,8 @@ CREATE TABLE applications (
     status              ENUM('pending','shortlisted','contacted','accepted','rejected')
                         NOT NULL DEFAULT 'pending',
     notes               TEXT          DEFAULT NULL,
+    materials_token     VARCHAR(64)   DEFAULT NULL,
+    materials_sent_at   TIMESTAMP     NULL DEFAULT NULL,
     created_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_status  (status),

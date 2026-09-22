@@ -60,6 +60,8 @@ async function ensureSchema() {
         agree_declaration     VARCHAR(10)  NOT NULL DEFAULT 'No',
         status                VARCHAR(20)  NOT NULL DEFAULT 'pending',
         notes                 TEXT         DEFAULT NULL,
+        materials_token       VARCHAR(64)  DEFAULT NULL,
+        materials_sent_at     TIMESTAMPTZ  DEFAULT NULL,
         created_at            TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
         updated_at            TIMESTAMPTZ  NOT NULL DEFAULT NOW()
       )`,
@@ -104,6 +106,17 @@ async function ensureSchema() {
   for (const col of yesNoCols) {
     try {
       await client.query(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS ${col} VARCHAR(10) NOT NULL DEFAULT 'No'`);
+    } catch (err) {
+      // column already exists or table missing; safe to ignore
+    }
+  }
+
+  for (const col of ['materials_token', 'materials_sent_at']) {
+    const ddl = col === 'materials_token'
+      ? `ALTER TABLE applications ADD COLUMN IF NOT EXISTS ${col} VARCHAR(64)`
+      : `ALTER TABLE applications ADD COLUMN IF NOT EXISTS ${col} TIMESTAMPTZ`;
+    try {
+      await client.query(ddl);
     } catch (err) {
       // column already exists or table missing; safe to ignore
     }

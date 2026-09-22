@@ -143,6 +143,19 @@ $success = flash('success');
       <?php endif; ?>
     </dd>
 
+    <dt>Materials sent</dt>
+    <dd>
+      <?php if ($app['materials_sent_at']): ?>
+        <?= date('d M Y, g:i a', strtotime($app['materials_sent_at'])) ?>
+        <?php if ($app['materials_token']): ?>
+          — <?php $_mats = '/materials?token=' . urlencode($app['materials_token']); ?>
+          <a href="<?= h($_mats) ?>" target="_blank" style="color:var(--blue);font-weight:700;">open agent link</a>
+        <?php endif; ?>
+      <?php else: ?>
+        Not yet
+      <?php endif; ?>
+    </dd>
+
     <dt>Applied on</dt>
     <dd><?= date('d M Y, g:i a', strtotime($app['created_at'])) ?></dd>
 

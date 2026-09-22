@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Your Wazambi GPS Agent Materials</title>
+<style>
+  :root{--navy:#0A1E3C;--blue:#0E6EFF;--ink:#1A2438;--muted:#5B6B85;--line:#E5E8F1;--bg:#F7F9FC}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .banner{background:linear-gradient(120deg,#0A1E3C,#123A74);color:#fff;padding:44px 20px 76px;text-align:center}
+  .banner .logo{display:inline-block;font-weight:900;letter-spacing:.04em;font-size:20px;color:#fff}
+  .banner .logo b{color:#FFC61A}
+  .banner h1{font-size:26px;margin-top:14px;font-weight:900}
+  .banner p{color:#C7D6F0;margin-top:8px;font-size:15px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 18px}
+  .shell{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:-40px;padding:26px 22px;box-shadow:0 10px 30px rgba(10,30,60,.08)}
+  .shell h2{font-size:16px;font-weight:900;margin-bottom:6px}
+  .shell .intro{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .item{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px;background:#fff;transition:.15s}
+  .item:hover{border-color:var(--blue)}
+  .item .head{display:flex;align-items:center;gap:8px}
+  .item .ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:#EAF1FF;color:var(--blue);flex:none}
+  .item.video .ico{background:#EAF8F1;color:#10B981}
+  .item h3{font-size:14px;font-weight:800;line-height:1.3}
+  .item p{font-size:12.5px;color:var(--muted);flex:1}
+  .item a{display:inline-block;margin-top:6px;background:var(--blue);color:#fff;text-decoration:none;font-weight:800;font-size:13px;padding:8px 12px;border-radius:8px;text-align:center}
+  .item a:hover{filter:brightness(1.08)}
+  .soon{display:inline-block;margin-top:6px;background:#F1F3F8;color:var(--muted);font-weight:700;font-size:12px;padding:8px 12px;border-radius:8px;text-align:center}
+  .foot{text-align:center;color:var(--muted);font-size:13px;padding:26px 18px 40px}
+  .err-shell{background:#fff;border:1px solid var(--line);border-radius:14px;margin-top:-34px;padding:34px 24px;text-align:center;box-shadow:0 10px 30px rgba(10,30,60,.08)}
+  .err-shell h2{font-size:18px;font-weight:900;margin-bottom:8px}
+  .err-shell p{color:var(--muted);font-size:14px;margin-bottom:18px}
+  .err-shell .btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:800;padding:10px 16px;border-radius:8px}
+</style>
+</head>
+<body>
+
+  <div class="banner">
+    <div class="wrap">
+      <span class="logo">WAZAMBI<b>GPS</b></span>
+      <h1>YOUR AGENT MATERIALS ARE READY</h1>
+      <p>Complete the Agent Guide and onboarding at your own pace, then start finding customers.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="shell" id="shell">
+      <div id="loading" style="text-align:center;color:#5B6B85;padding:20px">Loading your materials…</div>
+    </div>
+  </div>
+
+  <div class="foot">Wazambi GPS · Independent agent onboarding · Questions? We'll contact you on WhatsApp or email.</div>
+
+  <script>
+    (async () => {
+      var shell = document.getElementById('loading');
+      var token = new URLSearchParams(location.search).get('token');
+      if (!token) { showError(); return; }
+
+      var res;
+      try { res = await fetch('/api/materials/verify?token=' + encodeURIComponent(token)); }
+      catch (e) { showError('Unable to load your materials. Check your connection and try again.'); return; }
+
+      var data = await res.json().catch(() => ({}));
+      if (!data.ok) { showError(); return; }
+
+      var list = (data.materials || []).map(function (m) {
+        var isVid = m.kind === 'video';
+        var link = m.url
+          ? '<a href="' + m.url + '" target="_blank" rel="noopener">' + (isVid ? '&#9654; Watch' : '&#8595; Download') + '</a>'
+          : '<span class="soon">Coming soon</span>';
+        return '<div class="item ' + (isVid ? 'video' : '') + '">' +
+          '<div class="head"><span class="ico">' + (isVid ? '&#9654;' : '&#128216;') + '</span><h3>' + m.title + '</h3></div>' +
+          '<p>' + m.desc + '</p>' + link +
+        '</div>';
+      }).join('');
+
+      shell.className = 'grid';
+      shell.innerHTML =
+        '<h2 style="grid-column:1/-1">Welcome, ' + esc(data.agent.firstname) + '.</h2>' +
+        '<p class="intro" style="grid-column:1/-1">Work through these in your own time. Everything uses Wazambi\u2019s approved information and prices.</p>' +
+        list +
+        '<p class="intro" style="grid-column:1/-1;margin-bottom:0">Once you\u2019ve completed the Agent Guide and onboarding videos, start finding customers using your chosen sales methods.</p>';
+
+      function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    })();
+
+    function showError(msg) {
+      document.querySelector('.shell').innerHTML =
+        '<div style="text-align:center;padding:6px 0">' +
+        '<h2>This link is not valid</h2>' +
+        '<p>' + (msg || 'If you believe this is a mistake, contact Wazambi GPS through WhatsApp or email and we will send you a new link.') + '</p>' +
+        '<a class="btn" href="https://wazambi-gps.vercel.app">Back to Wazambi GPS</a>' +
+        '</div>';
+      document.querySelector('.banner h1').textContent = 'MATERIALS LINK';
+    }
+
+    window.showError = showError;
+  </script>
+</body>
+</html>

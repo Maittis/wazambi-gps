@@ -68,6 +68,15 @@ td a{color:var(--ink);font-weight:700;cursor:pointer}
 .pagination{padding:16px 24px;text-align:center}
 .pagination a,.pagination span{display:inline-block;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:700;margin:0 3px}
 .pagination a{background:#F7F9FC;color:var(--ink);cursor:pointer}
+.mmodal{position:fixed;inset:0;background:rgba(10,30,60,.55);display:flex;align-items:center;justify-content:center;z-index:200;padding:18px}
+.mmodal-card{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(10,30,60,.4);max-height:90vh;overflow:auto}
+.mmodal-card h3{font-size:16px;font-weight:900;margin-bottom:4px}
+.mmodal-card .sub{color:#8FA2BC;font-size:12.5px;margin-bottom:16px}
+.mmodal-link{background:#F7F9FC;border:1px solid #E5E8F1;border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--ink);word-break:break-all;margin-bottom:14px;font-family:inherit}
+.mmodal-actions{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.mmodal-actions a,.mmodal-actions button{flex:1;min-width:130px;text-align:center;padding:10px 12px;border:none;border-radius:8px;font-weight:800;font-size:12.5px;cursor:pointer;text-decoration:none;color:#fff;background:var(--blue);font-family:inherit}
+.mmodal-actions .wa{background:#25D366}.mmodal-actions .em{background:#8B5CF6}.mmodal-actions .cp{background:#0A1E3C}
+.mmodal .close{display:block;width:100%;padding:10px;border:1.5px solid #E5E8F1;background:#fff;border-radius:8px;font-weight:800;font-size:12.5px;cursor:pointer;color:var(--ink);font-family:inherit}
 .pagination a:hover{background:var(--yellow);color:var(--navy)}
 .pagination .current{background:var(--yellow);color:var(--navy)}
 .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#8FA2BC;margin-bottom:20px;cursor:pointer}
@@ -175,7 +184,7 @@ function renderShell(content){
     </aside>
     <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
     <div class="main">
-      <div class="topbar"><h1>Agent Applications <span class="ver" style="display:inline-block;background:var(--yellow);color:var(--navy);font-size:11px;font-weight:900;padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle">v3</span></h1><div class="topbar-right"><a onclick="state.view='dashboard';render()">Home</a><a onclick="doLogout()" style="color:#EF4444">Logout</a></div></div>
+      <div class="topbar"><h1>Agent Applications <span class="ver" style="display:inline-block;background:var(--yellow);color:var(--navy);font-size:11px;font-weight:900;padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle">v4</span></h1><div class="topbar-right"><a onclick="state.view='dashboard';render()">Home</a><a onclick="doLogout()" style="color:#EF4444">Logout</a></div></div>
       <div class="content">${content}</div>
     </div>
   </div>`;
@@ -274,6 +283,7 @@ async function viewApp(id){
     ['Approved info & prices?',yes(a.approved_info_prices)],['Info accurate?',yes(a.info_accurate)],
     ['Declaration accepted?',yes(a.agree_declaration)],
     ['CV download',a.cv_filename?`<a href="${a.cv_filename}" target="_blank" style="color:var(--blue);font-weight:700">📄 Download CV</a>`:'—'],
+    ['Materials sent',a.materials_sent_at?relTime(a.materials_sent_at):'Not yet'],
     ['Applied on',relTime(a.created_at)],['Last updated',relTime(a.updated_at)]
   ];
   const dGrid=details.map(([dt,dd])=>`<dt>${dt}</dt><dd>${dd}</dd>`).join('');
@@ -290,7 +300,11 @@ async function viewApp(id){
   <a class="back" onclick="renderDashboard()">← Back to list</a>
   <div class="panel" style="margin-bottom:24px"><div style="padding:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
     <div><h2 style="font-size:22px;font-weight:900">${a.fullname}</h2><p style="color:#8FA2BC;font-size:14px;margin-top:4px">${a.town} · Applied ${relTime(a.created_at)}</p></div>${badge(a.status)}
-  </div><div class="actions-bar" style="display:flex;gap:10px;flex-wrap:wrap">${statusBtns}</div></div>
+  </div><div class="actions-bar" style="display:flex;gap:10px;flex-wrap:wrap">${statusBtns}
+    ${a.status==='accepted'
+      ? `<button class="btn btn-b" onclick="sendMaterials(${a.id})">📤 Send materials</button><span style="align-self:center;font-size:12px;color:#8FA2BC">${a.materials_sent_at?'Sent '+relTime(a.materials_sent_at):'Not sent yet'}</span>`
+      : ''}
+  </div></div>
   <div class="panel" style="margin-bottom:24px"><div style="padding:18px 24px;border-bottom:1px solid #E5E8F1"><h3 style="font-size:16px;font-weight:800">Application Details</h3></div><dl class="detail-grid">${dGrid}</dl></div>
   <div class="note-box"><h3>📝 Internal notes</h3>
     <textarea id="notes" placeholder="Add a note about this applicant…">${a.notes||''}</textarea>
@@ -310,6 +324,34 @@ async function saveNotes(id){
   if(r.ok){flash('Notes saved.');viewApp(id);}
   else flash(r.error||'Failed','err');
 }
+
+async function sendMaterials(id){
+  closeMaterialsModal();
+  const r=await api('/api/applications/'+id,{method:'POST',body:{action:'send_materials'}});
+  if(!r.ok){flash(r.error||'Failed to create materials link.','err');return;}
+  const el=document.createElement('div');
+  el.id='materialsModal';
+  el.className='mmodal';
+  el.innerHTML=`<div class="mmodal-card">
+    <h3>📤 Agent onboarding materials</h3>
+    <p class="sub">Private link for this agent · Marked as sent ${r.sentAt?relTime(r.sentAt):''}</p>
+    <div class="mmodal-link">${r.materialsUrl}</div>
+    <div class="mmodal-actions">
+      <a href="${r.materialsUrl}" target="_blank" rel="noopener">Open link</a>
+      ${r.whatsappUrl?`<a class="wa" href="${r.whatsappUrl}" target="_blank" rel="noopener">Send on WhatsApp</a>`:''}
+      <a class="em" href="mailto:?subject=${encodeURIComponent(r.emailSubject)}&body=${encodeURIComponent(r.emailBody)}">Send by email</a>
+    </div>
+    <div class="mmodal-actions">
+      <button class="cp" onclick="navigator.clipboard&&navigator.clipboard.writeText('${r.materialsUrl}').then(()=>copiedLink())">Copy link</button>
+    </div>
+    <button class="close" onclick="closeMaterialsModal()">Close</button>
+  </div>`;
+  el.addEventListener('click',e=>{if(e.target===el)closeMaterialsModal();});
+  document.body.appendChild(el);
+  flash('Materials link ready. Send it to the agent via WhatsApp or email.');
+}
+function closeMaterialsModal(){const m=document.getElementById('materialsModal');if(m)m.remove();}
+function copiedLink(){flash('Link copied to clipboard.');}
 
 async function renderMedia(){
   state.view='media';
