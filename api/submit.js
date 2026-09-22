@@ -57,22 +57,25 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  const required = ['fullname','whatsapp','email','town','age_18','smartphone',
-    'sales_experience','sales_methods','knows_vehicles',
-    'weekly_customers','first_five','why_you',
-    'attend_both','travel_own_cost','understands_commission','agree_declaration'];
+const required = ['fullname','whatsapp','email','town','age_18','smartphone',
+  'sales_experience','sales_methods','reachable_businesses',
+  'weekly_customers','first_five','areas_covered','first_seven_days','why_you',
+  'complete_onboarding','understands_commission','approved_info_prices',
+  'info_accurate','agree_declaration'];
 
-  const errors = [];
-  for (const f of required) {
-    const v = get(f);
-    if (!v || v === '') errors.push(f.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) + ' is required.');
-  }
-  if (get('age_18') !== 'Yes') errors.push('You must be 18 years or older.');
-  if (get('attend_both') !== 'Yes') errors.push('You must be able to attend both training days.');
-  if (get('understands_commission') !== 'Yes') errors.push('You must confirm this is commission-based.');
-  if (get('agree_declaration') !== 'Yes') errors.push('You must accept the application declaration.');
-  if (!cvFile) errors.push('Please upload your CV in PDF format.');
-  if (cvFile && cvFile.originalFilename && !cvFile.originalFilename.endsWith('.pdf')) errors.push('CV must be a PDF file.');
+const errors = [];
+for (const f of required) {
+  const v = get(f);
+  if (!v || v === '') errors.push(f.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) + ' is required.');
+}
+if (get('age_18') !== 'Yes') errors.push('You must be 18 years or older.');
+if (get('complete_onboarding') !== 'Yes') errors.push('You must be able to complete the Agent Guide and onboarding videos.');
+if (get('understands_commission') !== 'Yes') errors.push('You must confirm this is commission-based.');
+if (get('approved_info_prices') !== 'Yes') errors.push('You must agree to use Wazambi\'s approved information and prices.');
+if (get('info_accurate') !== 'Yes') errors.push('You must confirm your information is accurate.');
+if (get('agree_declaration') !== 'Yes') errors.push('You must accept the application declaration.');
+if (!cvFile) errors.push('Please upload your CV in PDF format.');
+if (cvFile && cvFile.originalFilename && !cvFile.originalFilename.endsWith('.pdf')) errors.push('CV must be a PDF file.');
 
   if (errors.length > 0) {
     res.writeHead(422);
@@ -98,16 +101,18 @@ module.exports = async function handler(req, res) {
     await sql`
       INSERT INTO applications
         (fullname, whatsapp, email, town, age_18, smartphone, sales_experience,
-         experience_detail, sales_methods, knows_vehicles, weekly_customers,
-         first_five, why_you, attend_both, travel_own_cost,
-         understands_commission, cv_filename, agree_declaration)
+         experience_detail, sales_methods, reachable_businesses, weekly_customers,
+         first_five, areas_covered, first_seven_days, why_you,
+         complete_onboarding, understands_commission, approved_info_prices,
+         info_accurate, cv_filename, agree_declaration)
       VALUES
         (${get('fullname')}, ${get('whatsapp')}, ${get('email')}, ${get('town')},
          ${get('age_18')}, ${get('smartphone')}, ${get('sales_experience')},
-         ${get('experience_detail')}, ${get('sales_methods')}, ${get('knows_vehicles')},
-         ${parseInt(get('weekly_customers')) || 0}, ${get('first_five')}, ${get('why_you')},
-         ${get('attend_both')}, ${get('travel_own_cost')}, ${get('understands_commission')},
-         ${cvBlobUrl}, ${get('agree_declaration')})
+         ${get('experience_detail')}, ${get('sales_methods')}, ${get('reachable_businesses')},
+         ${parseInt(get('weekly_customers')) || 0}, ${get('first_five')}, ${get('areas_covered')},
+         ${get('first_seven_days')}, ${get('why_you')},
+         ${get('complete_onboarding')}, ${get('understands_commission')}, ${get('approved_info_prices')},
+         ${get('info_accurate')}, ${cvBlobUrl}, ${get('agree_declaration')})
     `;
     res.writeHead(200);
     return res.end(JSON.stringify({ ok: true, message: 'Application received' }));

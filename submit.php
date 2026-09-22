@@ -24,13 +24,16 @@ $fields = [
     'sales_experience' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'experience_detail' => FILTER_UNSAFE_RAW,
     'sales_methods'     => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-    'knows_vehicles'    => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'reachable_businesses' => FILTER_UNSAFE_RAW,
     'weekly_customers'  => FILTER_VALIDATE_INT,
     'first_five'  => FILTER_UNSAFE_RAW,
+    'areas_covered' => FILTER_UNSAFE_RAW,
+    'first_seven_days' => FILTER_UNSAFE_RAW,
     'why_you'     => FILTER_UNSAFE_RAW,
-    'attend_both' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-    'travel_own_cost' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'complete_onboarding' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'understands_commission' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'approved_info_prices' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'info_accurate' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'agree_declaration' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
 ];
 
@@ -52,10 +55,10 @@ foreach ($fields as $key => $filter) {
 
 // ── Validate required fields ────────────────────────────────────
 $required = ['fullname','whatsapp','email','town','age_18','smartphone',
-             'sales_experience','sales_methods','knows_vehicles',
-             'weekly_customers','first_five','why_you',
-             'attend_both','travel_own_cost','understands_commission',
-             'agree_declaration'];
+             'sales_experience','sales_methods','reachable_businesses',
+             'weekly_customers','first_five','areas_covered','first_seven_days',
+             'why_you','complete_onboarding','understands_commission',
+             'approved_info_prices','info_accurate','agree_declaration'];
 
 $errors = [];
 foreach ($required as $f) {
@@ -69,11 +72,17 @@ if ($data['email'] === false) {
 if ($data['age_18'] !== 'Yes') {
     $errors[] = 'You must be 18 years or older.';
 }
-if ($data['attend_both'] !== 'Yes') {
-    $errors[] = 'You must be able to attend both training days.';
+if ($data['complete_onboarding'] !== 'Yes') {
+    $errors[] = 'You must be able to complete the Agent Guide and onboarding videos.';
 }
 if ($data['understands_commission'] !== 'Yes') {
     $errors[] = 'You must confirm you understand this is commission-based.';
+}
+if ($data['approved_info_prices'] !== 'Yes') {
+    $errors[] = 'You must agree to use Wazambi\'s approved information and prices.';
+}
+if ($data['info_accurate'] !== 'Yes') {
+    $errors[] = 'You must confirm your information is accurate.';
 }
 if ($data['agree_declaration'] !== 'Yes') {
     $errors[] = 'You must accept the application declaration.';
@@ -117,14 +126,16 @@ move_uploaded_file($tmp, CV_UPLOAD_DIR . $cv_filename);
 
 $sql = "INSERT INTO applications
     (fullname, whatsapp, email, town, age_18, smartphone, sales_experience,
-     experience_detail, sales_methods, knows_vehicles, weekly_customers,
-     first_five, why_you, attend_both, travel_own_cost,
-     understands_commission, cv_filename, agree_declaration)
+     experience_detail, sales_methods, reachable_businesses, weekly_customers,
+     first_five, areas_covered, first_seven_days, why_you,
+     complete_onboarding, understands_commission, approved_info_prices,
+     info_accurate, cv_filename, agree_declaration)
     VALUES
     (:fullname,:whatsapp,:email,:town,:age_18,:smartphone,:sales_experience,
-     :experience_detail,:sales_methods,:knows_vehicles,:weekly_customers,
-     :first_five,:why_you,:attend_both,:travel_own_cost,
-     :understands_commission,:cv_filename,:agree_declaration)";
+     :experience_detail,:sales_methods,:reachable_businesses,:weekly_customers,
+     :first_five,:areas_covered,:first_seven_days,:why_you,
+     :complete_onboarding,:understands_commission,:approved_info_prices,
+     :info_accurate,:cv_filename,:agree_declaration)";
 
 $stmt = db()->prepare($sql);
 $stmt->execute([
@@ -137,13 +148,16 @@ $stmt->execute([
     ':sales_experience'      => $data['sales_experience'],
     ':experience_detail'     => $data['experience_detail'],
     ':sales_methods'         => $data['sales_methods'],
-    ':knows_vehicles'        => $data['knows_vehicles'],
+    ':reachable_businesses'  => $data['reachable_businesses'],
     ':weekly_customers'      => $data['weekly_customers'],
     ':first_five'            => $data['first_five'],
+    ':areas_covered'         => $data['areas_covered'],
+    ':first_seven_days'      => $data['first_seven_days'],
     ':why_you'               => $data['why_you'],
-    ':attend_both'           => $data['attend_both'],
-    ':travel_own_cost'       => $data['travel_own_cost'],
+    ':complete_onboarding'   => $data['complete_onboarding'],
     ':understands_commission'=> $data['understands_commission'],
+    ':approved_info_prices'  => $data['approved_info_prices'],
+    ':info_accurate'         => $data['info_accurate'],
     ':cv_filename'           => $cv_filename,
     ':agree_declaration'     => $data['agree_declaration'],
 ]);

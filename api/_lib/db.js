@@ -46,13 +46,16 @@ async function ensureSchema() {
         sales_experience      VARCHAR(10)  NOT NULL DEFAULT 'No',
         experience_detail     TEXT,
         sales_methods         VARCHAR(255) NOT NULL,
-        knows_vehicles        VARCHAR(10)  NOT NULL DEFAULT 'No',
+        reachable_businesses  TEXT,
         weekly_customers      INT          NOT NULL DEFAULT 0,
         first_five            TEXT         NOT NULL,
+        areas_covered         TEXT,
+        first_seven_days      TEXT,
         why_you               TEXT         NOT NULL,
-        attend_both           VARCHAR(10)  NOT NULL DEFAULT 'No',
-        travel_own_cost       VARCHAR(10)  NOT NULL DEFAULT 'No',
+        complete_onboarding   VARCHAR(10)  NOT NULL DEFAULT 'No',
         understands_commission VARCHAR(10) NOT NULL DEFAULT 'No',
+        approved_info_prices  VARCHAR(10)  NOT NULL DEFAULT 'No',
+        info_accurate         VARCHAR(10)  NOT NULL DEFAULT 'No',
         cv_filename           TEXT         DEFAULT NULL,
         agree_declaration     VARCHAR(10)  NOT NULL DEFAULT 'No',
         status                VARCHAR(20)  NOT NULL DEFAULT 'pending',
@@ -85,6 +88,24 @@ async function ensureSchema() {
     } catch (err) {
       err.message = `[${name}] ${err.message}`;
       throw err;
+    }
+  }
+
+  // Migrate existing tables (idempotent).
+  const textCols = ['reachable_businesses', 'areas_covered', 'first_seven_days'];
+  const yesNoCols = ['complete_onboarding', 'approved_info_prices', 'info_accurate'];
+  for (const col of textCols) {
+    try {
+      await client.query(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS ${col} TEXT`);
+    } catch (err) {
+      // column already exists or table missing; safe to ignore
+    }
+  }
+  for (const col of yesNoCols) {
+    try {
+      await client.query(`ALTER TABLE applications ADD COLUMN IF NOT EXISTS ${col} VARCHAR(10) NOT NULL DEFAULT 'No'`);
+    } catch (err) {
+      // column already exists or table missing; safe to ignore
     }
   }
 

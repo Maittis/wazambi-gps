@@ -27,9 +27,11 @@ if ($search !== '') {
 $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
 $sql = "SELECT id, fullname, whatsapp, email, town, age_18, smartphone,
-        sales_experience, experience_detail, sales_methods, knows_vehicles,
-        weekly_customers, first_five, why_you, attend_both, travel_own_cost,
-        understands_commission, status, notes, created_at
+        sales_experience, experience_detail, sales_methods,
+        reachable_businesses, weekly_customers, first_five, areas_covered,
+        first_seven_days, why_you, complete_onboarding,
+        understands_commission, approved_info_prices, info_accurate,
+        status, notes, created_at
         FROM applications $whereSql ORDER BY created_at DESC";
 
 $stmt = db()->prepare($sql);
@@ -47,9 +49,10 @@ $fp = fopen('php://output', 'w');
 fwrite($fp, "\xEF\xBB\xBF");
 
 $fheaders = ['ID','Full Name','WhatsApp','Email','Town','18+','Smartphone',
-             'Sales Experience','Experience Detail','Sales Methods','Knows Vehicle Owners',
-             'Weekly Customers','First 5 Customers','Why Select You','Attend Both',
-             'Travel Own Cost','Understands Commission','Status','Notes','Applied'];
+             'Sales Experience','Experience Detail','Sales Methods','Reachable Businesses',
+             'Weekly Customers','First 5 Customers','Areas Covered','First 7 Days',
+             'Why Select You','Complete Onboarding','Understands Commission',
+             'Approved Info & Prices','Info Accurate','Status','Notes','Applied'];
 fputcsv($fp, $fheaders);
 
 foreach ($rows as $r) {
@@ -64,13 +67,16 @@ foreach ($rows as $r) {
         $r['sales_experience'],
         $r['experience_detail'],
         $r['sales_methods'],
-        $r['knows_vehicles'],
+        $r['reachable_businesses'],
         $r['weekly_customers'],
         $r['first_five'],
+        $r['areas_covered'],
+        $r['first_seven_days'],
         $r['why_you'],
-        $r['attend_both'],
-        $r['travel_own_cost'],
+        $r['complete_onboarding'],
         $r['understands_commission'],
+        $r['approved_info_prices'],
+        $r['info_accurate'],
         $r['status'],
         $r['notes'],
         $r['created_at'],

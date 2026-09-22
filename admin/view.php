@@ -98,8 +98,8 @@ $success = flash('success');
     <dt>Sales methods</dt>
     <dd><?= h($app['sales_methods']) ?></dd>
 
-    <dt>Knows vehicle owners?</dt>
-    <dd><?= $app['knows_vehicles'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
+    <dt>Reachable businesses / fleet operators</dt>
+    <dd><?= nl2br(h($app['reachable_businesses'])) ?: '—' ?></dd>
 
     <dt>Potential customers / week</dt>
     <dd><strong><?= (int)$app['weekly_customers'] ?></strong></dd>
@@ -107,17 +107,26 @@ $success = flash('success');
     <dt>How to find first 5 customers</dt>
     <dd><?= nl2br(h($app['first_five'])) ?></dd>
 
+    <dt>Areas to cover</dt>
+    <dd><?= nl2br(h($app['areas_covered'])) ?: '—' ?></dd>
+
+    <dt>First seven days plan</dt>
+    <dd><?= nl2br(h($app['first_seven_days'])) ?: '—' ?></dd>
+
     <dt>Why should Wazambi select you?</dt>
     <dd><?= nl2br(h($app['why_you'])) ?></dd>
 
-    <dt>Can attend both days?</dt>
-    <dd><?= $app['attend_both'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
-
-    <dt>Travel at own cost?</dt>
-    <dd><?= $app['travel_own_cost'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
+    <dt>Can complete Agent Guide + onboarding?</dt>
+    <dd><?= $app['complete_onboarding'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
 
     <dt>Understands commission-based?</dt>
     <dd><?= $app['understands_commission'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
+
+    <dt>Approved info & prices?</dt>
+    <dd><?= $app['approved_info_prices'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
+
+    <dt>Info accurate?</dt>
+    <dd><?= $app['info_accurate'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
 
     <dt>Declaration accepted?</dt>
     <dd><?= $app['agree_declaration'] === 'Yes' ? '✅ Yes' : '❌ No' ?></dd>
