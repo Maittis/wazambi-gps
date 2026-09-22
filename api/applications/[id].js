@@ -61,7 +61,8 @@ module.exports = async function handler(req, res) {
 
       const msg = `Hello ${firstname}! Your Wazambi GPS Agent materials are ready. Open them here: ${materialsUrl} Complete the Agent Guide and onboarding videos at your own pace, then you can start finding customers. Welcome aboard!`;
 
-      const phoneDigits = String(app.whatsapp || '').replace(/[^\d]/g, '');
+      let phoneDigits = String(app.whatsapp || '').replace(/[^\d]/g, '');
+      if (phoneDigits.startsWith('0')) phoneDigits = '260' + phoneDigits.slice(1);
       const whatsappUrl = phoneDigits ? `https://wa.me/${phoneDigits}?text=${encodeURIComponent(msg)}` : null;
 
       res.writeHead(200);
