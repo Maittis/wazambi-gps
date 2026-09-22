@@ -31,9 +31,11 @@ module.exports = async function handler(req, res) {
 
   const rows = await sqlUnsafe(
     `SELECT id, fullname, whatsapp, email, town, age_18, smartphone,
-      sales_experience, experience_detail, sales_methods, knows_vehicles,
-      weekly_customers, first_five, why_you, attend_both, travel_own_cost,
-      understands_commission, status, notes, created_at
+      sales_experience, experience_detail, sales_methods,
+      reachable_businesses, weekly_customers, first_five, areas_covered,
+      first_seven_days, why_you, complete_onboarding,
+      understands_commission, approved_info_prices, info_accurate,
+      status, notes, created_at
      FROM applications ${whereSql}
      ORDER BY created_at DESC`,
     ...params
@@ -41,16 +43,19 @@ module.exports = async function handler(req, res) {
 
   const BOM = '\uFEFF';
   const headers = ['ID','Full Name','WhatsApp','Email','Town','18+','Smartphone',
-    'Sales Experience','Experience Detail','Sales Methods','Knows Vehicle Owners',
-    'Weekly Customers','First 5 Customers','Why Select You','Attend Both',
-    'Travel Own Cost','Understands Commission','Status','Notes','Applied'];
+    'Sales Experience','Experience Detail','Sales Methods','Reachable Businesses',
+    'Weekly Customers','First 5 Customers','Areas Covered','First 7 Days',
+    'Why Select You','Complete Onboarding','Understands Commission',
+    'Approved Info & Prices','Info Accurate','Status','Notes','Applied'];
 
   let csv = BOM + headers.join(',') + '\r\n';
   for (const r of rows) {
     csv += [r.id, r.fullname, r.whatsapp, r.email, r.town, r.age_18, r.smartphone,
-      r.sales_experience, r.experience_detail, r.sales_methods, r.knows_vehicles,
-      r.weekly_customers, r.first_five, r.why_you, r.attend_both, r.travel_own_cost,
-      r.understands_commission, r.status, r.notes,
+      r.sales_experience, r.experience_detail, r.sales_methods,
+      r.reachable_businesses, r.weekly_customers, r.first_five, r.areas_covered,
+      r.first_seven_days, r.why_you, r.complete_onboarding,
+      r.understands_commission, r.approved_info_prices, r.info_accurate,
+      r.status, r.notes,
       new Date(r.created_at).toISOString()
     ].map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',') + '\r\n';
   }
