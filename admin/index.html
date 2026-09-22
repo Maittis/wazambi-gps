@@ -175,7 +175,7 @@ function renderShell(content){
     </aside>
     <button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
     <div class="main">
-      <div class="topbar"><h1>Agent Applications</h1><div class="topbar-right"><a onclick="state.view='dashboard';render()">Home</a><a onclick="doLogout()" style="color:#EF4444">Logout</a></div></div>
+      <div class="topbar"><h1>Agent Applications <span class="ver" style="display:inline-block;background:var(--yellow);color:var(--navy);font-size:11px;font-weight:900;padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:middle">v3</span></h1><div class="topbar-right"><a onclick="state.view='dashboard';render()">Home</a><a onclick="doLogout()" style="color:#EF4444">Logout</a></div></div>
       <div class="content">${content}</div>
     </div>
   </div>`;
