@@ -75,18 +75,22 @@ module.exports = async function handler(req, res) {
 
     const isImage = /\.(jpg|jpeg|png|webp)$/i.test(slotKey);
     const isVideo = /\.(mp4|webm|mov)$/i.test(slotKey);
-    if (!isImage && !isVideo) {
+    const isPdf = /\.pdf$/i.test(slotKey);
+    if (!isImage && !isVideo && !isPdf) {
       res.writeHead(400);
       return res.end(JSON.stringify({ ok: false, error: 'Unknown slot type' }));
     }
 
-    const category = isImage ? 'images' : 'media';
+    let category, contentType;
+    if (isImage) { category = 'images'; contentType = 'image/jpeg'; }
+    else if (isVideo) { category = 'media'; contentType = 'video/mp4'; }
+    else { category = 'materials'; contentType = 'application/pdf'; }
     const blobName = `${category}/${slotKey}`;
 
     try {
       const blob = await put(blobName, fs.createReadStream(uploadFile.filepath), {
         access: 'public',
-        contentType: uploadFile.mimetype || (isImage ? 'image/jpeg' : 'video/mp4'),
+        contentType: uploadFile.mimetype || contentType,
         addRandomSuffix: false,
         allowOverwrite: true,
       });
